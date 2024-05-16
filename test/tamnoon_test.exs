@@ -15,11 +15,26 @@ defmodule TamnoonTest do
   end
 
   test "defmethod macro working properly" do
-    Tamnoon.Tst.tmnn_get(nil, nil)
+    Tamnoon.TestCustomMethods.tmnn_get(nil, nil)
   end
 
   test "route_request working properly" do
-    Tamnoon.MethodManager.route_request(Tamnoon.Tst, %{"method" => "test_route"}, %{var: 1})
+    Tamnoon.MethodManager.route_request(Tamnoon.TestCustomMethods, %{"method" => "test_route"}, %{var: 1})
+    |> IO.inspect()
+  end
+
+  test "default methods working properly" do
+    assert Tamnoon.TestDefaultMethods.tmnn_get(%{"key" => "working?"}, %{working?: "true"})
+    == {{:ok, "true"}, %{working?: "true"}}
+  end
+
+  test "tamnoon_methods module working properly 1" do
+    assert Tamnoon.Methods.get(%{"key" => "working?"}, %{working?: "true"})
+    == {{:ok, "true"}, %{working?: "true"}}
+  end
+
+  test "tamnoon_methods module working properly 2" do
+    Tamnoon.MethodManager.route_request(Tamnoon.Methods, %{"method" => "get", "key" => "working?"}, %{working?: "true"})
     |> IO.inspect()
   end
 end

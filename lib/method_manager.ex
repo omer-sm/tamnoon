@@ -20,7 +20,7 @@ defmodule Tamnoon.MethodManager do
     |> Enum.find(fn {name, arity} ->
       arity == 2 && Atom.to_string(name) == "tmnn_" <> method
     end)
-    {{:ok, ret_val}, new_state} = quote do
+    {{ret_val, new_state}, []} = quote do
       unquote(methods_module).unquote(func)(unquote(Macro.escape(payload)), unquote(Macro.escape(state)))
     end
     |> Code.eval_quoted()
