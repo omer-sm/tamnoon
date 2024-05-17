@@ -1,4 +1,7 @@
 defmodule Tamnoon.SocketHandler do
+  @moduledoc """
+  A `:cowboy_websocket` implementation. Provides
+  """
   @behaviour :cowboy_websocket
   @methods_module Tamnoon.Methods
   @initial_state %{}
@@ -13,7 +16,7 @@ defmodule Tamnoon.SocketHandler do
     {:ok, state}
   end
 
-  #@callback websocket_handle({:text, json :: tuple()}, state :: map()) :: {:reply, {:text, return_val :: String.t()}, new_state :: map()}
+  #@spec websocket_handle({:text, json :: tuple()}, state :: map()) :: {:reply, {:text, return_val :: String.t()}, new_state :: map()}
   def websocket_handle({:text, json}, state) do
     payload = Jason.decode!(json)
     Tamnoon.MethodManager.route_request(@methods_module, payload, state)

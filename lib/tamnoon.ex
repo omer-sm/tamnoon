@@ -1,13 +1,27 @@
 defmodule Tamnoon do
   @moduledoc """
-  TBA
+  This module provides functions needed to initialize Tamnoon. You do not need to handle
+  it directly, rather, the only time you need to call something in this module is in your
+  supervision tree, to add it to the children and configure it (see `child_spec/1`).
+  ## Example
+  ```
+  def start_link(opts \\\\ []) do
+    children = [Tamnoon]
+    opts = [strategy: :one_for_one, name: Tamnoon.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+  ```
   """
   require Logger
-  @doc """
-  Returns a Tamnoon server supervisor child spec. invoked when adding Tamnoon to the
-  supervision tree.
+  @typedoc """
+  Options for initializing Tamnoon. Defaults to `[4000, Tamnoon.Router, Tamnoon.SocketHandler]`.
   """
+  @type tamnoon_opts() :: [port: number(), router: module(), socket_handler: module()]
 
+  @doc """
+  Returns a Tamnoon server supervisor child spec. See `tamnoon_opts/0` for more info.
+  """
+  @spec child_spec(opts :: tamnoon_opts()) :: map()
   def child_spec(opts \\ []) do
     %{
       id: Tamnoon.Supervisor,
@@ -15,15 +29,14 @@ defmodule Tamnoon do
     }
   end
 
-  @doc """
-  See `start_link/1`
-  """
+  @doc false
   @spec start_link() :: {:ok, pid()}
   def start_link(), do: start_link([])
 
   @doc """
-  Starts the supervisor. takes options for port, router and socket handler.
+  Starts the supervisor. See `tamnoon_opts/0` for more info.
   """
+  @spec start_link(server_opts :: tamnoon_opts()) :: {:ok, pid()} | {:error, {:already_started, pid()} | {:shutdown, term()} | term()}
   def start_link(server_opts) do
     router = Keyword.get(server_opts, :router, Tamnoon.Router)
     port = Keyword.get(server_opts, :port, 4000)
@@ -46,6 +59,7 @@ defmodule Tamnoon do
     Supervisor.start_link(children, opts)
   end
 
+  @doc false
   def dispatch(socket_handler, router) do
     [
       {:_,
