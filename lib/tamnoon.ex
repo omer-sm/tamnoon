@@ -14,9 +14,10 @@ defmodule Tamnoon do
   """
   require Logger
   @typedoc """
-  Options for initializing Tamnoon. Defaults to `[4000, Tamnoon.Router, Tamnoon.SocketHandler]`.
+  Options for initializing Tamnoon. Defaults to `[4000, Tamnoon.Router, Tamnoon.SocketHandler, Tamnoon.Methods, %{}]`.
   """
-  @type tamnoon_opts() :: [port: number(), router: module(), socket_handler: module()]
+  @type tamnoon_opts() :: [port: number(), router: module(), socket_handler: module(),
+                          methods_module: module(), initial_state: map()]
 
   @doc """
   Returns a Tamnoon server supervisor child spec. See `tamnoon_opts/0` for more info.
@@ -51,7 +52,9 @@ defmodule Tamnoon do
       ),
       Registry.child_spec(
         keys: :duplicate,
-        name: Tamnoon.Registry
+        name: Tamnoon.Registry,
+        meta: [initial_state: Keyword.get(server_opts, :initial_state, %{}),
+              methods_module: Keyword.get(server_opts, :methods_module, Tamnoon.Methods)]
       )
     ]
     opts = [strategy: :one_for_one, name: Tamnoon.ServerSupervisor]

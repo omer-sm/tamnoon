@@ -37,4 +37,11 @@ defmodule TamnoonTest do
     Tamnoon.MethodManager.route_request(Tamnoon.Methods, %{"method" => "get", "key" => "working?"}, %{working?: "true"})
     |> IO.inspect()
   end
+
+  test "setting default state works properly" do
+    children = [{Tamnoon, [[initial_state: %{working?: true}]]}]
+    opts = [strategy: :one_for_one, name: Tamnoon.Supervisor]
+    Supervisor.start_link(children, opts)
+    assert Tamnoon.Tamnoon.Registry |> Registry.meta(:initial_state) |> elem(1) == %{working?: true}
+  end
 end
