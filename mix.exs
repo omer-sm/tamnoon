@@ -8,10 +8,15 @@ defmodule Tamnoon.MixProject do
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-
+      description: description(),
+      package: package(),
       # Docs
       name: "Tamnoon",
-      source_url: "https://github.com/omer-sm/tamnoon"
+      source_url: "https://github.com/omer-sm/tamnoon",
+      docs: [
+        main: "Tamnoon",
+        logo: "assets/logo.png"
+      ]
     ]
   end
 
@@ -30,6 +35,16 @@ defmodule Tamnoon.MixProject do
       {:plug_cowboy, "~> 2.7"},
       {:jason, "~> 1.4"},
       {:ex_doc, "~> 0.32.2", only: :dev, runtime: false}
+    ]
+  end
+
+  defp description, do: "A simple, customizable framework for Websocket server
+  implementations. Make Elixir power your favorite front-end framework effortlessly!"
+
+  defp package do
+    [
+      license: "Apache-2.0",
+      links: %{"GitHub" => "https://github.com/omer-sm/tamnoon"}
     ]
   end
 end

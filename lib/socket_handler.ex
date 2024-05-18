@@ -1,28 +1,55 @@
 defmodule Tamnoon.SocketHandler do
   @moduledoc """
-  A `:cowboy_websocket` implementation. Provides
+  A default `:cowboy_websocket` implementation. Usually there should not be a reason to do anything
+  directly with this module, as it gets its options from `Tamnoon.start_link/1` and
+  adapts to them automatically. However, it is still documented for the sake of allowing
+  extensiblity.
+  You can replace the module with a custom one via setting it as the _(drumroll..)_ `:socket_handler`
+  key's value in `Tamnoon.start_link/1`'s options.
   """
   @behaviour :cowboy_websocket
-  @methods_module Tamnoon.Methods
-  @initial_state %{}
 
-  def init(req, initial_state \\ @initial_state) when is_map(initial_state) do
+  @doc """
+  Initiates the websocket connection
+  """
+  @impl true
+  @spec init(:cowboy_req.req(), map()) :: {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map()}
+  def init(req, initial_state \\ initial_state()) when is_map(initial_state) do
     {:cowboy_websocket, req, initial_state}
   end
 
+  @doc """
+  Initiates the websocket and adds the client to the registry under the `"clients"` channel.
+  """
+  @impl true
+  @spec websocket_init(map()) :: {:ok, state :: map()}
   def websocket_init(state) do
     Tamnoon.Registry
     |> Registry.register("clients", {})
     {:ok, state}
   end
 
-  #@spec websocket_handle({:text, json :: tuple()}, state :: map()) :: {:reply, {:text, return_val :: String.t()}, new_state :: map()}
+  @doc """
+  Receives a websocket request and decodes it, sending it to the `Tamnoon.MethodManager.route_request/3`
+  function.
+  """
+  @impl true
+  @spec websocket_handle({:text, tuple()}, map()) :: {:reply, {:text, return_val :: String.t()}, new_state :: map()}
   def websocket_handle({:text, json}, state) do
     payload = Jason.decode!(json)
-    Tamnoon.MethodManager.route_request(@methods_module, payload, state)
+    Tamnoon.MethodManager.route_request(methods_module(), payload, state)
   end
 
+  @doc """
+  Handles messages from other BEAM processes. By default it is only used for handling
+  `"pub"` requests, and as such it simply forwards the message to `websocket_handle/2`.
+  """
+  @impl true
+  @spec websocket_info(info :: map(), map()) :: {:reply, {:text, return_val :: String.t()}, new_state :: map()}
   def websocket_info(info, state) do
     websocket_handle({:text, info}, state)
   end
+
+  defp initial_state(), do: Tamnoon.Registry |> Registry.meta(:initial_state) |> elem(1)
+  defp methods_module(), do: Tamnoon.Registry |> Registry.meta(:methods_module) |> elem(1)
 end
