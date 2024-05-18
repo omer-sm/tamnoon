@@ -50,7 +50,7 @@ defmodule Tamnoon.MixProject do
 
   defp package do
     [
-      license: "Apache-2.0",
+      licenses: ["Apache-2.0"],
       links: %{"GitHub" => "https://github.com/omer-sm/tamnoon"}
     ]
   end
