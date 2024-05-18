@@ -48,9 +48,6 @@ defmodule Tamnoon.MixProject do
     ]
   end
 
-  defp description, do: "A simple, customizable framework for Websocket server
-  implementations. Make Elixir power your favorite front-end framework effortlessly!"
-
   defp package do
     [
       license: "Apache-2.0",
@@ -61,10 +58,4 @@ defmodule Tamnoon.MixProject do
   defp description, do: "A simple, customizable framework for Websocket server
   implementations. Make Elixir power your favorite front-end framework effortlessly!"
 
-  defp package do
-    [
-      license: "Apache-2.0",
-      links: %{"GitHub" => "https://github.com/omer-sm/tamnoon"}
-    ]
-  end
 end
