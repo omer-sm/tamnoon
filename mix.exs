@@ -21,6 +21,11 @@ defmodule Tamnoon.MixProject do
       docs: [
         main: "Tamnoon",
         logo: "assets/logo.png"
+      ],
+      source_url: "https://github.com/omer-sm/tamnoon",
+      docs: [
+        main: "Tamnoon",
+        logo: "assets/logo.png"
       ]
     ]
   end
