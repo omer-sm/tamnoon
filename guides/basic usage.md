@@ -1,6 +1,6 @@
 # Basic Usage
 
-With Tamnoon aiming to be as simple as possible, you don't need much more than the basic functionality in order to write simple apps. We will be creating a simple app where users can fight a number that is displayed.
+With Tamnoon aiming to be as simple as possible, you don't need much more than the basic functionality in order to write simple apps. We will be creating a simple app where users can fight a number that is displayed. You can find the finished app on [github](https://github.com/omer-sm/tamnoon_sample).
 
 First, you can set up your _initial state_ by passing a map of the default configuration to the, aptly named, `:initial_state` property of Tamnoon in your `start/2` function:
 
