@@ -18,7 +18,7 @@ defmodule Tamnoon.MixProject do
         logo: "assets/logo.png",
         extras: ["README.md", "guides/getting started.md", "guides/basic usage.md",
                 "guides/custom methods.md", "guides/pubsub.md",
-                "guides/troubleshooting.md"]
+                "guides/troubleshooting.md", "guides/method overview.md"]
       ]
     ]
   end
