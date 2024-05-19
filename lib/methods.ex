@@ -24,17 +24,17 @@ defmodule Tamnoon.Methods do
     end
   end
   @doc """
-  Returns the value of the item with the key specified under the `"key"` field
+  Returns the field with the key specified under the `"key"` field
   in the request. Returns an error string if there is no such item.
   """
-  @spec tmnn_get(map(), map()) :: {value :: String.t() | number() | atom()} | {error :: String.t(), state :: map()}
+  @spec tmnn_get(map(), map()) :: {field :: map(), state :: map()} | {error :: String.t(), state :: map()}
   def tmnn_get(req, state), do: get(req, state)
   @doc """
   Updates the value of the item with the key at the `"key"` field on the request,
-  setting it to the value at the `"val"` key. Returns a tuple with the new value and
+  setting it to the value at the `"val"` key. Returns a tuple with the updated field and
   the state, or an error string if there is no such item.
   """
-  @spec tmnn_update(map(), map()) :: {new_value :: String.t() | number() | atom()} | {error :: String.t(), state :: map()}
+  @spec tmnn_update(map(), map()) :: {new_field :: map(), state :: map()} | {error :: String.t(), state :: map()}
   def tmnn_update(req, state), do: update(req, state)
   @doc """
   Subscribes to the channel under the `"key"` field in the request. If there is no such
@@ -64,7 +64,7 @@ defmodule Tamnoon.Methods do
   def get(req, state) do
     key = get_key(req, state)
     if (key != nil) do
-      {state[key], state}
+      {%{key => state[key]}, state}
     else
       {"Error: no matching key", state}
     end
@@ -74,7 +74,7 @@ defmodule Tamnoon.Methods do
   def update(req, state) do
     key = get_key(req, state)
     if (key != nil) do
-      {req["val"], Map.put(state, key, req["val"])}
+      {%{key => req["val"]}, Map.put(state, key, req["val"])}
     else
       {"Error: no matching key", state}
     end
@@ -119,6 +119,11 @@ defmodule Tamnoon.Methods do
     {:ok, state}
   end
 
+  @doc """
+  Returns the value of the key under the field `"key"` in the request as an atom.
+  Note: this is *NOT* a method handler - simply a utility function.
+  """
+  @spec get_key(map(), map()) :: atom() | nil
   def get_key(req, state) do
     cond do
       Map.has_key?(state, req["key"]) -> req["key"]

@@ -14,8 +14,8 @@ defmodule Tamnoon.SocketHandler do
   """
   @impl true
   @spec init(:cowboy_req.req(), map()) :: {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map()}
-  def init(req, initial_state \\ initial_state()) when is_map(initial_state) do
-    {:cowboy_websocket, req, initial_state}
+  def init(req, _state) do
+    {:cowboy_websocket, req, initial_state()}
   end
 
   @doc """

@@ -15,17 +15,10 @@ defmodule Tamnoon.MixProject do
       source_url: "https://github.com/omer-sm/tamnoon",
       docs: [
         main: "Tamnoon",
-        logo: "assets/logo.png"
-      ],
-      source_url: "https://github.com/omer-sm/tamnoon",
-      docs: [
-        main: "Tamnoon",
-        logo: "assets/logo.png"
-      ],
-      source_url: "https://github.com/omer-sm/tamnoon",
-      docs: [
-        main: "Tamnoon",
-        logo: "assets/logo.png"
+        logo: "assets/logo.png",
+        extras: ["README.md", "guides/getting started.md", "guides/basic usage.md",
+                "guides/custom methods.md", "guides/pubsub.md",
+                "guides/troubleshooting.md"]
       ]
     ]
   end

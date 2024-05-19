@@ -20,7 +20,7 @@ defmodule Tamnoon do
                           methods_module: module(), initial_state: map()]
 
   @doc """
-  Returns a Tamnoon server supervisor child spec. See `tamnoon_opts/0` for more info.
+  Returns a Tamnoon server supervisor child spec. See `t:tamnoon_opts/0` for more info.
   """
   @spec child_spec(opts :: tamnoon_opts()) :: map()
   def child_spec(opts \\ []) do
@@ -35,7 +35,7 @@ defmodule Tamnoon do
   def start_link(), do: start_link([])
 
   @doc """
-  Starts the supervisor. See `tamnoon_opts/0` for more info.
+  Starts the supervisor. See `t:tamnoon_opts/0` for more info.
   """
   @spec start_link(server_opts :: tamnoon_opts()) :: {:ok, pid()} | {:error, {:already_started, pid()} | {:shutdown, term()} | term()}
   def start_link(server_opts) do
