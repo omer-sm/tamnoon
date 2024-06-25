@@ -11,6 +11,11 @@ defmodule Tamnoon.Router do
   plug :match
   plug :dispatch
 
+  get "/" do
+    Tamnoon.Compiler.build_from_root()
+    send_file(conn, 200, "tamnoon_out/app.html")
+  end
+
   match _ do
     send_resp(conn, 404, "404")
   end
