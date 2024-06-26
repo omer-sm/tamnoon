@@ -4,7 +4,7 @@ defmodule Tamnoon.MixProject do
   def project do
     [
       app: :tamnoon,
-      version: "1.0.0-a.0",
+      version: "1.0.0-a.1",
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -18,7 +18,7 @@ defmodule Tamnoon.MixProject do
         logo: "assets/logo.png",
         extras: ["README.md", "changelog.md", "guides/getting started.md", "guides/basic usage.md",
                 "guides/custom methods.md", "guides/pubsub.md",
-                "guides/troubleshooting.md", "guides/method overview.md"]
+                "guides/troubleshooting.md", "guides/method overview.md", "guides/v1 guide (WIP).md"]
       ]
     ]
   end

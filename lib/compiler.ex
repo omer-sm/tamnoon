@@ -4,11 +4,11 @@ defmodule Tamnoon.Compiler do
   """
 
   @doc """
-  Compiles the 'root.html.heex' file into the final file that is sent to the client.
+  Compiles the 'root.ex' component into the final file that is sent to the client.
   """
-  @spec build_from_root(ws_address :: String.t(), root_path :: String.t()) :: :ok | {:error, atom()}
-  def build_from_root(ws_address \\ "ws://localhost:4000/ws/", root_path \\ "root.html.heex") do
-    compiled_html = render_component(root_path, %{ws_address: ws_address})
+  @spec build_from_root(ws_address :: String.t(), root :: String.t() | module()) :: :ok | {:error, atom()}
+  def build_from_root(ws_address \\ "ws://localhost:4000/ws/", root \\ Tamnoon.Components.Root) do
+    compiled_html = render_component(root, %{ws_address: ws_address})
     |> parse_tmnn_heex()
     File.write("tamnoon_out/app.html", compiled_html)
   end
@@ -21,7 +21,8 @@ defmodule Tamnoon.Compiler do
   When the function is used inside a component that gets built into the root in the `build_from_root/2`
   function, the last argument should be `false` to avoid invoking `parse_tmnn_heex/1` multiple
   times.
-  Inside EEx blocks in heex components, this function can be invoked as `<%= r.(MyComponent) %>`.
+  Inside EEx blocks in heex components, this function can be invoked as `<%= r.([args..]) %>`.
+  See `render_component_dyn/1`.
   """
   @spec render_component(module() | String.t(), map(), boolean()) :: String.t()
   def render_component(component, assigns \\ %{}, parse_tmnn_heex \\ false)
@@ -32,13 +33,25 @@ defmodule Tamnoon.Compiler do
 
   def render_component(component, assigns, false) when is_binary(component) do
     "lib/components/" <> component
-    |> EEx.eval_file([r: &render_component/1, assigns: assigns])
+    |> EEx.eval_file([r: &render_component_dyn/1, assigns: assigns])
   end
 
   def render_component(component, assigns, false) do
     component.heex()
-    |> EEx.eval_string([r: &render_component/1, assigns: assigns])
+    |> EEx.eval_string([r: &render_component_dyn/1, assigns: assigns])
   end
+
+  @doc """
+  Utility function passed to EEx blocks in components. Calls `render_component/3` with the
+  elements in the list as the arguments. When passing it only the first argument, it can be
+  passed directly without putting it in a list.
+  See `render_component/3` for more info.
+  """
+  @spec render_component_dyn(args :: list() | module() | String.t()) :: String.t()
+  def render_component_dyn(component) when not is_list(component), do: render_component(component)
+  def render_component_dyn([component]), do: render_component(component)
+  def render_component_dyn([component, assigns]), do: render_component(component, assigns)
+  def render_component_dyn([component, assigns, parse_tmnn_heex]), do: render_component(component, assigns, parse_tmnn_heex)
 
   @doc """
   Takes as an argument a string containing compiled heex for a component, and returns the
@@ -57,9 +70,8 @@ defmodule Tamnoon.Compiler do
           end
         end)
       end)
-      x = Regex.replace(~r/(?<attr>[a-z|\d]+)=@(?<key>[a-z|\d]+)/m, x, "")
-      x = Regex.replace(~r/>( *@[a-z|\d]+)/m, x, ">")
-      IO.inspect(x)
+      x = Regex.replace(~r/(?<attr>[a-z\d]+)=@(?<key>[_a-z\d]+)/m, x, "")
+      x = Regex.replace(~r/>( *@[_a-z\d]+)/m, x, ">")
       x = if (x =~ ~r/class="[^"]*"/ || attr_classes == "") do
         x
       else
@@ -74,13 +86,13 @@ defmodule Tamnoon.Compiler do
   end
 
   defp get_component_attrs(component, "") do
-    Regex.scan(~r/(?<attr>[a-z|\d]+)=@(?<key>[a-z|\d]+)/m, component)
+    Regex.scan(~r/(?<attr>[a-z\d]+)=@(?<key>[_a-z\d]+)/m, component)
     |> Enum.group_by(&(String.to_atom(Enum.at(&1, 2))), &(Enum.at(&1, 1)))
   end
 
   defp get_component_attrs(component, innerHtml) do
     [[nil, "innerHtml", innerHtml]]
-    |> Enum.concat(Regex.scan(~r/(?<attr>[a-z|\d]+)=@(?<key>[a-z|\d]+)/m, component))
+    |> Enum.concat(Regex.scan(~r/(?<attr>[a-z\d]+)=@(?<key>[_a-z\d]+)/m, component))
     |> Enum.group_by(&(String.to_atom(Enum.at(&1, 2))), &(Enum.at(&1, 1)))
   end
 

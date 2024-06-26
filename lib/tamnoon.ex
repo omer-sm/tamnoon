@@ -58,7 +58,7 @@ defmodule Tamnoon do
       )
     ]
     opts = [strategy: :one_for_one, name: Tamnoon.ServerSupervisor]
-    Logger.info("Tamnoon listening on port #{port}..")
+    Logger.info("Tamnoon listening on http://localhost:#{port}..")
     Supervisor.start_link(children, opts)
   end
 

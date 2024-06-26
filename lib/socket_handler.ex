@@ -10,12 +10,12 @@ defmodule Tamnoon.SocketHandler do
   @behaviour :cowboy_websocket
 
   @doc """
-  Initiates the websocket connection
+  Initiates the websocket connection.
   """
   @impl true
-  @spec init(:cowboy_req.req(), map()) :: {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map()}
+  @spec init(:cowboy_req.req(), map()) :: {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map(), opts :: map()}
   def init(req, _state) do
-    {:cowboy_websocket, req, initial_state()}
+    {:cowboy_websocket, req, initial_state(), %{idle_timeout: 120_000}}
   end
 
   @doc """

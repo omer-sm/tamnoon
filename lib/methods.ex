@@ -21,6 +21,8 @@ defmodule Tamnoon.Methods do
       def tmnn_pub(req, state), do: pub(req, state)
       def tmnn_unsub(req, state), do: unsub(req, state)
       def tmnn_subbed_channels(req, state), do: subbed_channels(req, state)
+      def tmnn_sync(req, state), do: sync(req, state)
+      def tmnn_keep_alive(req, state), do: keep_alive(req, state)
     end
   end
   @doc """
@@ -59,6 +61,18 @@ defmodule Tamnoon.Methods do
   """
   @spec tmnn_subbed_channels(map(), map()) :: {%{subbed_channels: channels :: [String.t()]}, state :: map()}
   def tmnn_subbed_channels(req, state), do: subbed_channels(req, state)
+
+  @doc """
+  Returns the current state. Automatically invoked when the connection is started.
+  """
+  @spec tmnn_sync(map(), map()) :: {state :: map(), state :: map()}
+  def tmnn_sync(req, state), do: sync(req, state)
+
+  @doc """
+  Invoked every 55 seconds by the client in order to prevent idle timeouts.
+  """
+  @spec tmnn_keep_alive(map(), map()) :: {nil, state :: map()}
+  def tmnn_keep_alive(req, state), do: keep_alive(req, state)
 
   @doc false
   def get(req, state) do
@@ -117,6 +131,16 @@ defmodule Tamnoon.Methods do
       end
     end)
     {%{pub: :ok}, state}
+  end
+
+  @doc false
+  def sync(_req, state) do
+    {state, state}
+  end
+
+  @doc false
+  def keep_alive(_req, state) do
+    {nil, state}
   end
 
   @doc """
