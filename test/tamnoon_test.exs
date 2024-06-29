@@ -44,4 +44,9 @@ defmodule TamnoonTest do
     Supervisor.start_link(children, opts)
     assert Tamnoon.Tamnoon.Registry |> Registry.meta(:initial_state) |> elem(1) == %{working?: true}
   end
+
+  test "html escape works properly" do
+    str = "< > text & '\" more > text"
+    assert Tamnoon.Compiler.escape_html(str) == "&lt; &gt; text &amp; &#39;&quot; more &gt; text"
+  end
 end

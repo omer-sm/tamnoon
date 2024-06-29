@@ -14,10 +14,15 @@ defmodule Tamnoon do
   """
   require Logger
   @typedoc """
-  Options for initializing Tamnoon. Defaults to `[4000, Tamnoon.Router, Tamnoon.SocketHandler, Tamnoon.Methods, %{}]`.
+  Options for initializing Tamnoon. Defaults to `[8000, Tamnoon.Router, Tamnoon.SocketHandler, Tamnoon.Methods, %{}]`.
+  - `port`: The port Tamnoon will run on. Defaults to _8000_.
+  - `initial_state`: The state new clients will start with. Defaults to an empty map.
+  - `methods_module`: The module where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
+  - `router`: The router module (see `m:Plug.Router`). Defaults to `m:Tamnoon.Router`.
+  - `socket_handler`: The handler module for WebSocket requests. Usually doesn't need to be overriden. Defaults to `m:Tamnoon.SocketHandler`.
   """
-  @type tamnoon_opts() :: [port: number(), router: module(), socket_handler: module(),
-                          methods_module: module(), initial_state: map()]
+  @type tamnoon_opts() :: [initial_state: map(), port: number(), router: module(), socket_handler: module(),
+                          methods_module: module()]
 
   @doc """
   Returns a Tamnoon server supervisor child spec. See `t:tamnoon_opts/0` for more info.
@@ -40,7 +45,7 @@ defmodule Tamnoon do
   @spec start_link(server_opts :: tamnoon_opts()) :: {:ok, pid()} | {:error, {:already_started, pid()} | {:shutdown, term()} | term()}
   def start_link(server_opts) do
     router = Keyword.get(server_opts, :router, Tamnoon.Router)
-    port = Keyword.get(server_opts, :port, 4000)
+    port = Keyword.get(server_opts, :port, 8000)
     children = [
       Plug.Cowboy.child_spec(
         scheme: :http,

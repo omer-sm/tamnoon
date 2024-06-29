@@ -1,9 +1,6 @@
 defmodule Tamnoon.Router do
   @moduledoc """
-  This module provides a default router for HTTP(S) requests, returning a 404 status
-  to all of them. This is useful in order to only serve Websocket requests, however
-  creating a custom one configured to serve a website might be beneficial. If you wish to
-  do so, see `m:Plug.Router` and `Tamnoon.child_spec/1`.
+  This module provides a default router for HTTP(S) requests, which builds and serves the web app.
   """
 
   use Plug.Router

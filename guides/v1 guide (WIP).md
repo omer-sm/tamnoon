@@ -30,7 +30,7 @@ To listen to an event, assign some HTML attribute (or the inner HTML) of an elem
 <p hidden=@hidep>@myvar</p>
 ```
 
-Any time the server sends a map with a key named "myvar", the inner **HTML** (meaning script injections ARE a possibility) of the _<p>_ will update to display it. Same goes for "hidep". Note that the attributes set to a Tamnoon variable get removed from it in the final HTML, so you can set default values like so:
+Any time the server sends a map with a key named "myvar", the inner text (or the inner HTML if _myvar_ is prefixed with _raw-_) of the _<p>_ will update to display it. Same goes for "hidep". Note that the attributes set to a Tamnoon variable get removed from it in the final HTML, so you can set default values like so:
 
 ```
 <p hidden=@hidep hidden="true">@myvar</p>
@@ -41,6 +41,14 @@ To emit events, define an element with an event listener (such as "onclick") and
 ```
 <input oninput=@setval />
 ```
+
+You can also trigger methods with different keys without making a new one for each with the _implicit events_ syntax. For example, the following will trigger the `update` method for the key `myval`: _(note that a field with the key `"val"` will be added as with any input event)_
+
+```
+<input oninput=@update-myval />
+```
+
+The `"pub"` method can also be triggered like this, with the following syntax: `@pub-[channel]-[method]-[key (optional)]`
 
 ## Making the app component
 

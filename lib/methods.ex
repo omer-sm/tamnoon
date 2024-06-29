@@ -14,7 +14,8 @@ defmodule Tamnoon.Methods do
   defmacro __using__(_opts \\ []) do
     quote do
       import Tamnoon.MethodManager
-      import Tamnoon.Methods
+      import Tamnoon.Methods, except: [tmnn_get: 2, tmnn_update: 2, tmnn_sub: 2,
+      tmnn_pub: 2, tmnn_unsub: 2, tmnn_subbed_channels: 2, tmnn_sync: 2, tmnn_keep_alive: 2, ]
       def tmnn_get(req, state), do: get(req, state)
       def tmnn_update(req, state), do: update(req, state)
       def tmnn_sub(req, state), do: sub(req, state)
