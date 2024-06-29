@@ -1,6 +1,6 @@
 # Changelog
 
-### v1.0.0-a.2
+### v1.0.0-a.2 (29.06.24)
 
 - Added **implicit events**: setting an input event attribute (such as onchange) to `@method-key` will make it fire the method with the specified key. The `"pub"` method can be triggered like so: `@pub-[channel]-[method]-[key (optional)]`.
 
