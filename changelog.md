@@ -10,7 +10,7 @@
 
 - Added `Tamnoon.Compiler.escape_html/1` and made it available as `<%= h.(content) %>` inside components.
 
-- Completely rewrote the readme and the guides and revamped some of the existing module documentation.
+- Completely rewrote the guides, the readme, and revamped some of the existing module documentation.
 
 #### Minor changes:
 
@@ -23,8 +23,6 @@
 - Changed the WebSocket script in the root layout to connect to the WebSocket at the current URL (instead of _localhost:8000/ws_).
 
 - Changed `Tamnoon.Compiler.build_from_root/1` to no longer accept a WebSocket address.
-
-- Rewrote the readme (v1.0.0-a.2b)
 
 ### v1.0.0-a.1 (26.06.24)
 
