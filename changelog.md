@@ -10,7 +10,7 @@
 
 - Added `Tamnoon.Compiler.escape_html/1` and made it available as `<%= h.(content) %>` inside components.
 
-- Completely rewrote the guides in the documentation and revamped some of the existing module documentation.
+- Completely rewrote the readme and the guides and revamped some of the existing module documentation.
 
 #### Minor changes:
 
