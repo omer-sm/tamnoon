@@ -24,6 +24,8 @@
 
 - Changed `Tamnoon.Compiler.build_from_root/1` to no longer accept a WebSocket address.
 
+- Rewrote the readme (v1.0.0-a.2b)
+
 ### v1.0.0-a.1 (26.06.24)
 
 - Added the _sync_ method (`Tamnoon.Methods.tmnn_sync/2`) that returns the current state to the client. By default, it is invoked when the WebSocket connection is opened.
