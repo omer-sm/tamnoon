@@ -15,7 +15,7 @@ defmodule Tamnoon.Methods do
     quote do
       import Tamnoon.MethodManager
       import Tamnoon.Methods, except: [tmnn_get: 2, tmnn_update: 2, tmnn_sub: 2,
-      tmnn_pub: 2, tmnn_unsub: 2, tmnn_subbed_channels: 2, tmnn_sync: 2, tmnn_keep_alive: 2, ]
+      tmnn_pub: 2, tmnn_unsub: 2, tmnn_subbed_channels: 2, tmnn_sync: 2, tmnn_keep_alive: 2, tmnn_set_state: 2]
       def tmnn_get(req, state), do: get(req, state)
       def tmnn_update(req, state), do: update(req, state)
       def tmnn_sub(req, state), do: sub(req, state)
@@ -24,6 +24,7 @@ defmodule Tamnoon.Methods do
       def tmnn_subbed_channels(req, state), do: subbed_channels(req, state)
       def tmnn_sync(req, state), do: sync(req, state)
       def tmnn_keep_alive(req, state), do: keep_alive(req, state)
+      def tmnn_set_state(req, state), do: set_state(req, state)
     end
   end
   @doc """
@@ -74,6 +75,13 @@ defmodule Tamnoon.Methods do
   """
   @spec tmnn_keep_alive(map(), map()) :: {nil, state :: map()}
   def tmnn_keep_alive(req, state), do: keep_alive(req, state)
+
+  @doc """
+  Sets the state on the server to the state sent by the client. Invoked when the client reconnects
+  to the server in order to prevent information loss.
+  """
+  @spec tmnn_set_state(map(), map()) :: {%{set_state: :ok}, state :: map()}
+  def tmnn_set_state(req, state), do: set_state(req, state)
 
   @doc false
   def get(req, state) do
@@ -142,6 +150,12 @@ defmodule Tamnoon.Methods do
   @doc false
   def keep_alive(_req, state) do
     {nil, state}
+  end
+
+  @doc false
+  def set_state(req, _state) do
+    new_state = for {key, val} <- req["state"], into: %{}, do: {String.to_atom(key), val}
+    {%{set_state: :ok}, new_state}
   end
 
   @doc """

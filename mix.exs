@@ -4,7 +4,7 @@ defmodule Tamnoon.MixProject do
   def project do
     [
       app: :tamnoon,
-      version: "1.0.0-a.2",
+      version: "1.0.0-a.3",
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -20,7 +20,7 @@ defmodule Tamnoon.MixProject do
         extras: ["README.md", "changelog.md", "guides (new)/overview.md",
         "guides (new)/getting started.md", "guides (new)/components.md",
         "guides (new)/the state and methods.md", "guides (new)/tamnoon heex.md",
-        "guides (new)/wrapping up.md"]
+        "guides (new)/wrapping up.md", "guides (new)/deployment.md"]
       ]
     ]
   end

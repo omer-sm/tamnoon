@@ -11,6 +11,8 @@ To set the initial state, change Tamnoon's `child_spec` in your supervision tree
 
 As you can see, we are storing the user's name, the message the user is currently typing, and the messages.
 
+_Note: The state should not have string keys, only atoms._
+
 ## Methods
 
 When we want something to happen, we need to trigger _methods_. Methods are the client's way of interacting with the server. Tamnoon comes with a few different built-in methods for interacting with the state and for implementing PubSub functionality (more on that later):

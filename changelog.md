@@ -1,5 +1,21 @@
 # Changelog
 
+### V1.0.0-a.3 (25.07.24)
+
+- Added support for running Tamnoon over HTTPS.
+
+- Added support for Mix Releases (via `Tamnoon.make_release/1`). 
+
+- Updated the client script to try reconnecting to the server if it disconnects.
+
+- Updated the client script to keep a copy of the state which will be sent to the server on a reconnect. _Note: this also means that string keys in the state are now not supported, as the state will have its keys converted to atoms on the reconnect._
+
+#### Minor Changes:
+
+- Added `Tamnoon.Methods.tmnn_set_state/2`.
+
+- Added deployment guide (WIP)
+
 ### v1.0.0-a.2 (29.06.24)
 
 - Added **implicit events**: setting an input event attribute (such as onchange) to `@method-key` will make it fire the method with the specified key. The `"pub"` method can be triggered like so: `@pub-[channel]-[method]-[key (optional)]`.

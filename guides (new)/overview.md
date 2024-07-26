@@ -19,3 +19,5 @@ Below is a rundown of the contents of every guide:
 - _Tamnoon HEEx_: The Tamnoon HEEx syntax, and how to use it in order to implement real-time client-server interactions.
 
 - _Wrapping Up_: Completing the chat app.
+
+-_Deployment_: Deploying Tamnoon apps (Mix Releases, HTTPS).

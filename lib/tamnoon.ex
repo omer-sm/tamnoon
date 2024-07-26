@@ -20,9 +20,17 @@ defmodule Tamnoon do
   - `methods_module`: The module where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
   - `router`: The router module (see `m:Plug.Router`). Defaults to `m:Tamnoon.Router`.
   - `socket_handler`: The handler module for WebSocket requests. Usually doesn't need to be overriden. Defaults to `m:Tamnoon.SocketHandler`.
+  - `protocol_opts`: Whether Tamnoon uses HTTP or HTTPS. See `t:tamnoon_protocol_opts/0` for more info.
   """
-  @type tamnoon_opts() :: [initial_state: map(), port: number(), router: module(), socket_handler: module(),
-                          methods_module: module()]
+  @type tamnoon_opts() :: [initial_state: map(), port: number(), methods_module: module(),
+                          router: module(), socket_handler: module(), protocol_opts: tamnoon_protocol_opts()]
+
+  @typedoc """
+  Options for configuring the protocol used by Tamnoon. Can be either `:http` or a keyword list containing
+  values for `:keyfile`, `:certfile`, and `:otp_app` *(`:otp_app` is required only when using relative paths for the
+  key and certificate files)*. Defaults to `:http`.
+  """
+  @type tamnoon_protocol_opts() :: :http | [keyfile: String.t(), certfile: String.t(), otp_app: atom()]
 
   @doc """
   Returns a Tamnoon server supervisor child spec. See `t:tamnoon_opts/0` for more info.
@@ -46,14 +54,27 @@ defmodule Tamnoon do
   def start_link(server_opts) do
     router = Keyword.get(server_opts, :router, Tamnoon.Router)
     port = Keyword.get(server_opts, :port, 8000)
+
+    protocol_opts = Keyword.get(server_opts, :protocol_opts, :http)
+    {protocol, certfile, keyfile, otp_app} = if (protocol_opts == :http) do
+      {:http, nil, nil, nil}
+    else
+      {:https, Keyword.get(protocol_opts, :certfile, nil), Keyword.get(protocol_opts, :keyfile, nil), Keyword.get(protocol_opts, :otp_app, nil)}
+    end
+
+    cowboy_opts = [
+      dispatch: dispatch(Keyword.get(server_opts, :socket_handler, Tamnoon.SocketHandler), router),
+      port: port,
+      certfile: certfile,
+      keyfile: keyfile,
+      otp_app: otp_app
+    ]
+    |> Keyword.filter(&(elem(&1, 1)))
     children = [
       Plug.Cowboy.child_spec(
-        scheme: :http,
+        scheme: protocol,
         plug: router,
-        options: [
-          dispatch: dispatch(Keyword.get(server_opts, :socket_handler, Tamnoon.SocketHandler), router),
-          port: port,
-        ]
+        options: cowboy_opts
       ),
       Registry.child_spec(
         keys: :duplicate,
@@ -63,7 +84,7 @@ defmodule Tamnoon do
       )
     ]
     opts = [strategy: :one_for_one, name: Tamnoon.ServerSupervisor]
-    Logger.info("Tamnoon listening on http://localhost:#{port}..")
+    Logger.info("Tamnoon listening on #{protocol}://localhost:#{port}..")
     Supervisor.start_link(children, opts)
   end
 
@@ -77,6 +98,22 @@ defmodule Tamnoon do
         ]
       }
     ]
+  end
+
+  @doc """
+  Copies HEEx file components to the release directory and creates a _tamnoon\_out_ directory
+  in it. It is needed to be ran as a _step_ in the release (see `m:Mix.Release`).
+  """
+  @spec make_release(Mix.Release) :: Mix.Release
+  def make_release(release) do
+    File.mkdir("#{release.path}/bin/tamnoon_out")
+    File.mkdir("#{release.path}/bin/lib")
+    File.mkdir("#{release.path}/bin/lib/components")
+    File.ls("lib/components")
+    |> elem(1)
+    |> Enum.filter(&(String.ends_with?(&1, ".heex")))
+    |> Enum.each(&(File.copy!("lib/components/#{&1}", "#{release.path}/bin/lib/components/#{&1}")))
+    release
   end
 
 end
