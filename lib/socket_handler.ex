@@ -13,7 +13,8 @@ defmodule Tamnoon.SocketHandler do
   Initiates the websocket connection.
   """
   @impl true
-  @spec init(:cowboy_req.req(), map()) :: {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map(), opts :: map()}
+  @spec init(:cowboy_req.req(), map()) ::
+          {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map(), opts :: map()}
   def init(req, _state) do
     {:cowboy_websocket, req, initial_state(), %{idle_timeout: 120_000}}
   end
@@ -26,6 +27,7 @@ defmodule Tamnoon.SocketHandler do
   def websocket_init(state) do
     Tamnoon.Registry
     |> Registry.register("clients", {})
+
     {:ok, state}
   end
 
@@ -34,7 +36,8 @@ defmodule Tamnoon.SocketHandler do
   function.
   """
   @impl true
-  @spec websocket_handle({:text, tuple()}, map()) :: {:reply, {:text, return_val :: String.t()}, new_state :: map()}
+  @spec websocket_handle({:text, tuple()}, map()) ::
+          {:reply, {:text, return_val :: String.t()}, new_state :: map()}
   def websocket_handle({:text, json}, state) do
     payload = Jason.decode!(json)
     Tamnoon.MethodManager.route_request(methods_module(), payload, state)
@@ -45,7 +48,8 @@ defmodule Tamnoon.SocketHandler do
   `"pub"` requests, and as such it simply forwards the message to `websocket_handle/2`.
   """
   @impl true
-  @spec websocket_info(info :: map(), map()) :: {:reply, {:text, return_val :: String.t()}, new_state :: map()}
+  @spec websocket_info(info :: map(), map()) ::
+          {:reply, {:text, return_val :: String.t()}, new_state :: map()}
   def websocket_info(info, state) do
     websocket_handle({:text, info}, state)
   end

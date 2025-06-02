@@ -8,8 +8,10 @@ defmodule Tamnoon.Compiler do
   """
   @spec build_from_root(root :: String.t() | module()) :: :ok | {:error, atom()}
   def build_from_root(root \\ Tamnoon.Components.Root) do
-    compiled_html = render_component(root)
-    |> parse_tmnn_heex()
+    compiled_html =
+      render_component(root)
+      |> parse_tmnn_heex()
+
     File.write("tamnoon_out/app.html", compiled_html)
   end
 
@@ -26,19 +28,20 @@ defmodule Tamnoon.Compiler do
   """
   @spec render_component(module() | String.t(), map(), boolean()) :: String.t()
   def render_component(component, assigns \\ %{}, parse_tmnn_heex \\ false)
+
   def render_component(component, assigns, true) do
     render_component(component, assigns, false)
     |> parse_tmnn_heex()
   end
 
   def render_component(component, assigns, false) when is_binary(component) do
-    "lib/components/" <> component
-    |> EEx.eval_file([r: &render_component_dyn/1, h: &escape_html/1, assigns: assigns])
+    ("lib/components/" <> component)
+    |> EEx.eval_file(r: &render_component_dyn/1, h: &escape_html/1, assigns: assigns)
   end
 
   def render_component(component, assigns, false) do
     component.heex()
-    |> EEx.eval_string([r: &render_component_dyn/1, h: &escape_html/1, assigns: assigns])
+    |> EEx.eval_string(r: &render_component_dyn/1, h: &escape_html/1, assigns: assigns)
   end
 
   @doc """
@@ -51,7 +54,9 @@ defmodule Tamnoon.Compiler do
   def render_component_dyn(component) when not is_list(component), do: render_component(component)
   def render_component_dyn([component]), do: render_component(component)
   def render_component_dyn([component, assigns]), do: render_component(component, assigns)
-  def render_component_dyn([component, assigns, parse_tmnn_heex]), do: render_component(component, assigns, parse_tmnn_heex)
+
+  def render_component_dyn([component, assigns, parse_tmnn_heex]),
+    do: render_component(component, assigns, parse_tmnn_heex)
 
   @doc """
   Takes as an argument a string containing compiled heex for a component, and returns the
@@ -60,44 +65,49 @@ defmodule Tamnoon.Compiler do
   @spec parse_tmnn_heex(String.t()) :: String.t()
   def parse_tmnn_heex(compiled_heex) do
     Regex.replace(~r/< *\w *[^>]*> *(?:@([-_a-z\d]+))?/m, compiled_heex, fn x, inner_value ->
-      attr_classes = get_component_attrs(x, inner_value)
-      |> Enum.reduce("", fn {key, attrs}, acc ->
-        acc <> Enum.reduce(attrs, "", fn attr, acc ->
-          if (String.starts_with?(attr, "on")) do
-            acc <> " tmnnevent-" <> "#{attr}-" <> key
-          else
-            acc <> " tmnn-" <> key <> "-#{attr}"
-          end
+      attr_classes =
+        get_component_attrs(x, inner_value)
+        |> Enum.reduce("", fn {key, attrs}, acc ->
+          acc <>
+            Enum.reduce(attrs, "", fn attr, acc ->
+              if String.starts_with?(attr, "on") do
+                acc <> " tmnnevent-" <> "#{attr}-" <> key
+              else
+                acc <> " tmnn-" <> key <> "-#{attr}"
+              end
+            end)
         end)
-      end)
+
       x = Regex.replace(~r/(?<attr>[a-z\d]+)=@(?<key>[-_a-z\d]+)/m, x, "")
       x = Regex.replace(~r/>( *@[-_a-z\d]+)/m, x, ">")
-      x = if (x =~ ~r/class="[^"]*"/ || attr_classes == "") do
-        x
-      else
-        [a, b] = Regex.split(~r/< *\w+/, x, [parts: 2, include_captures: true, trim: true])
-        a <> " class=\"\" " <> b
-      end
+
+      x =
+        if x =~ ~r/class="[^"]*"/ || attr_classes == "" do
+          x
+        else
+          [a, b] = Regex.split(~r/< *\w+/, x, parts: 2, include_captures: true, trim: true)
+          a <> " class=\"\" " <> b
+        end
+
       Regex.replace(~r/class="([^"]*)"/, x, fn _, classes ->
         "class=\"#{classes}#{attr_classes}\""
       end)
-
     end)
   end
 
   defp get_component_attrs(component, "") do
     Regex.scan(~r/(?<attr>[a-z\d]+)=@(?<key>[-_a-z\d]+)/m, component)
-    |> Enum.group_by(&(Enum.at(&1, 2)), &(Enum.at(&1, 1)))
+    |> Enum.group_by(&Enum.at(&1, 2), &Enum.at(&1, 1))
   end
 
   defp get_component_attrs(component, inner_value) do
-    if (String.starts_with?(inner_value, "raw-")) do
+    if String.starts_with?(inner_value, "raw-") do
       [[nil, "innerHtml", String.slice(inner_value, 4..-1//1)]]
     else
       [[nil, "innerText", inner_value]]
     end
     |> Enum.concat(Regex.scan(~r/(?<attr>[a-z\d]+)=@(?<key>[_a-z\d]+)/m, component))
-    |> Enum.group_by(&(Enum.at(&1, 2)), &(Enum.at(&1, 1)))
+    |> Enum.group_by(&Enum.at(&1, 2), &Enum.at(&1, 1))
   end
 
   @escapes %{
@@ -114,7 +124,6 @@ defmodule Tamnoon.Compiler do
   """
   @spec escape_html(String.t()) :: String.t()
   def escape_html(content) do
-    String.replace(content, ["<", ">", "&", "\"", "'"], &(Map.get(@escapes, &1)))
+    String.replace(content, ["<", ">", "&", "\"", "'"], &Map.get(@escapes, &1))
   end
-
 end

@@ -8,13 +8,14 @@ defmodule Mix.Tasks.Tamnoon.MakeDirs do
 
   @impl Mix.Task
   def run(_args) do
-    if (File.dir?("lib/components")) do
+    if File.dir?("lib/components") do
       Mix.shell().info("Directory \"lib/components\" already exists, skipping..")
     else
       :ok = File.mkdir("lib/components")
       Mix.shell().info("Successfully created \"lib/components\"!")
     end
-    if (File.dir?("tamnoon_out")) do
+
+    if File.dir?("tamnoon_out") do
       Mix.shell().info("Directory \"tamnoon_out\" already exists, skipping..")
     else
       :ok = File.mkdir("tamnoon_out")
