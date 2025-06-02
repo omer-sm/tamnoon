@@ -4,6 +4,8 @@
 
 - Added the `tamnoon.override_root` Mix task. The task generates a router and a root component for you.
 
+- Added debug mode. Enabling it will log the payload and current state whenever a method is triggered.
+
 - Fixed bugs where unrelated HTML classes interfere with Tamnoon classes.
 
 - Added support for setting initial_state as a function, allowing the initial state to be recomputed for every client.
