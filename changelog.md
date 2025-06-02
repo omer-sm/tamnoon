@@ -2,8 +2,9 @@
 
 ### V1.0.0-a.4
 
-
 - Fixed bugs where unrelated HTML classes interfere with Tamnoon classes.
+
+- Added support for setting initial_state as a function, allowing the initial state to be recomputed for every client.
 
 ### V1.0.0-a.3 (25.07.24)
 
