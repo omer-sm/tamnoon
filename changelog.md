@@ -21,6 +21,7 @@
 
 - Updated the client script to keep a copy of the state which will be sent to the server on a reconnect. _Note: this also means that string keys in the state are now not supported, as the state will have its keys converted to atoms on the reconnect._
 
+
 #### Minor Changes:
 
 - Added `Tamnoon.Methods.tmnn_set_state/2`.
