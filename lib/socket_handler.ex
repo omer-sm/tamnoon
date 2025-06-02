@@ -54,6 +54,19 @@ defmodule Tamnoon.SocketHandler do
     websocket_handle({:text, info}, state)
   end
 
-  defp initial_state(), do: Tamnoon.Registry |> Registry.meta(:initial_state) |> elem(1)
-  defp methods_module(), do: Tamnoon.Registry |> Registry.meta(:methods_module) |> elem(1)
+  defp initial_state(),
+    do:
+      Tamnoon.Registry
+      |> Registry.meta(:initial_state)
+      |> elem(1)
+      |> then(fn
+        fun when is_function(fun, 0) -> fun.()
+        value -> value
+      end)
+
+  defp methods_module(),
+    do:
+      Tamnoon.Registry
+      |> Registry.meta(:methods_module)
+      |> elem(1)
 end

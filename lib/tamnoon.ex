@@ -17,14 +17,14 @@ defmodule Tamnoon do
   @typedoc """
   Options for initializing Tamnoon. Defaults to `[8000, Tamnoon.Router, Tamnoon.SocketHandler, Tamnoon.Methods, %{}]`.
   - `port`: The port Tamnoon will run on. Defaults to _8000_.
-  - `initial_state`: The state new clients will start with. Defaults to an empty map.
+  - `initial_state`: A map, or a function that returns one, representing the state new clients will start with. Defaults to an empty map.
   - `methods_module`: The module where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
   - `router`: The router module (see `m:Plug.Router`). Defaults to `m:Tamnoon.Router`.
   - `socket_handler`: The handler module for WebSocket requests. Usually doesn't need to be overriden. Defaults to `m:Tamnoon.SocketHandler`.
   - `protocol_opts`: Whether Tamnoon uses HTTP or HTTPS. See `t:tamnoon_protocol_opts/0` for more info.
   """
   @type tamnoon_opts() :: [
-          initial_state: map(),
+          initial_state: (-> map()) | map(),
           port: number(),
           methods_module: module(),
           router: module(),
