@@ -95,10 +95,14 @@ const connectWebSocket = (isReconnect = false) => {
         if (!(k in ['pub', 'sub', 'unsub', 'subbed_channels', 'set_state'])) {
           curr_state[k] = v;
         }
+
+        // Update the elements with the class that matches the key.
         document
           .querySelectorAll(`[class^="tmnn-${k}-"], [class*=" tmnn-${k}-"]`)
           .forEach((elem) => {
-            const classes = elem.className.split(/\s+/).filter((c) => c);
+            const classes = elem.className
+              .split(/\s+/)
+              .filter((c) => c && c.startsWith(`tmnn-${k}-`));
 
             classes.forEach((className) => {
               const attr = className.slice(className.lastIndexOf('-') + 1);
