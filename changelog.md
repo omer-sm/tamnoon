@@ -2,9 +2,12 @@
 
 ### V1.0.0-a.4
 
+- Added the `tamnoon.override_root` Mix task. The task generates a router and a root component for you.
+
 - Fixed bugs where unrelated HTML classes interfere with Tamnoon classes.
 
 - Added support for setting initial_state as a function, allowing the initial state to be recomputed for every client.
+
 
 ### V1.0.0-a.3 (25.07.24)
 
@@ -21,6 +24,7 @@
 - Added `Tamnoon.Methods.tmnn_set_state/2`.
 
 - Added deployment guide (WIP)
+
 
 ### v1.0.0-a.2 (29.06.24)
 
@@ -45,6 +49,7 @@
 - Changed the WebSocket script in the root layout to connect to the WebSocket at the current URL (instead of _localhost:8000/ws_).
 
 - Changed `Tamnoon.Compiler.build_from_root/1` to no longer accept a WebSocket address.
+
 
 ### v1.0.0-a.1 (26.06.24)
 
