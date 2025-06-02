@@ -7,6 +7,7 @@ defmodule Tamnoon.SocketHandler do
   You can replace the module with a custom one via setting it as the _(drumroll..)_ `:socket_handler`
   key's value in `Tamnoon.start_link/1`'s options.
   """
+  require Logger
   @behaviour :cowboy_websocket
 
   @doc """
@@ -40,6 +41,12 @@ defmodule Tamnoon.SocketHandler do
           {:reply, {:text, return_val :: String.t()}, new_state :: map()}
   def websocket_handle({:text, json}, state) do
     payload = Jason.decode!(json)
+
+    if (is_debug_mode?()) do
+      Logger.debug("DBG | Received payload: #{inspect(payload)}")
+      Logger.debug("DBG | Current state: #{inspect(state)}")
+    end
+
     Tamnoon.MethodManager.route_request(methods_module(), payload, state)
   end
 
@@ -69,4 +76,10 @@ defmodule Tamnoon.SocketHandler do
       Tamnoon.Registry
       |> Registry.meta(:methods_module)
       |> elem(1)
+
+  defp is_debug_mode?(),
+      do:
+        Tamnoon.Registry
+        |> Registry.meta(:debug_mode)
+        |> elem(1)
 end

@@ -20,6 +20,7 @@ defmodule Tamnoon do
   - `initial_state`: A map, or a function that returns one, representing the state new clients will start with. Defaults to an empty map.
   - `methods_module`: The module where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
   - `router`: The router module (see `m:Plug.Router`). Defaults to `m:Tamnoon.Router`.
+  - `debug_mode`: Whether to enable debug mode. If set to `true`, Tamnoon will log debug information about the requests and state. Defaults to `false`.
   - `socket_handler`: The handler module for WebSocket requests. Usually doesn't need to be overriden. Defaults to `m:Tamnoon.SocketHandler`.
   - `protocol_opts`: Whether Tamnoon uses HTTP or HTTPS. See `t:tamnoon_protocol_opts/0` for more info.
   """
@@ -28,6 +29,7 @@ defmodule Tamnoon do
           port: number(),
           methods_module: module(),
           router: module(),
+          debug_mode: boolean(),
           socket_handler: module(),
           protocol_opts: tamnoon_protocol_opts()
         ]
@@ -96,7 +98,8 @@ defmodule Tamnoon do
         name: Tamnoon.Registry,
         meta: [
           initial_state: Keyword.get(server_opts, :initial_state, %{}),
-          methods_module: Keyword.get(server_opts, :methods_module, Tamnoon.Methods)
+          methods_module: Keyword.get(server_opts, :methods_module, Tamnoon.Methods),
+          debug_mode: Keyword.get(server_opts, :debug_mode, false)
         ]
       )
     ]
