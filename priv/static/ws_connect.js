@@ -6,6 +6,56 @@ const curr_state = {};
 let socket;
 const inputListeners = [];
 
+// Add event listeners to elements with the appropriate classes.
+const addInputListeners = (rootElement = document) => {
+  rootElement
+    .querySelectorAll(`[class^="tmnnevent-"], [class*=" tmnnevent-"]`)
+    .forEach((elem) => {
+      const classes = elem.className
+        .split(/\s+/)
+        .filter((c) => c && c.startsWith('tmnnevent-'));
+
+      classes.forEach((className) => {
+        const classNameSplit = className.split('-');
+        const methodName = classNameSplit[2];
+        const eventName = classNameSplit[1].slice(2);
+
+        const eventListener = (e) => {
+          let msg = {
+            method: methodName,
+            val: e.target.value,
+            element: e.target.outerHTML,
+          };
+
+          if (methodName === 'pub') {
+            msg['channel'] = classNameSplit[3];
+            msg['action'] = {
+              method: classNameSplit[4],
+              val: e.target.value,
+              element: e.target.outerHTML,
+            };
+
+            if (classNameSplit.length === 6) {
+              msg['action']['key'] = classNameSplit[5];
+            }
+          } else if (classNameSplit.length === 4) {
+            msg['key'] = classNameSplit[3];
+          }
+
+          // Possible values for classNameSplit:
+          // ["tmnnevent", inEvent, method]
+          // ["tmnnevent", inEvent, method, key]
+          // ["tmnnevent", inEvent, "pub", channel, method]
+          // ["tmnnevent", inEvent, "pub", channel, method, key]
+          socket.send(JSON.stringify(msg));
+        };
+
+        elem.addEventListener(eventName, eventListener);
+        inputListeners.push({ elem, eventName, eventListener });
+      });
+    });
+};
+
 const connectWebSocket = (isReconnect = false) => {
   socket = new WebSocket(wsUrl);
 
@@ -20,53 +70,7 @@ const connectWebSocket = (isReconnect = false) => {
       );
     }, 55000);
 
-    // Add event listeners to elements with the appropriate classes.
-    document
-      .querySelectorAll(`[class^="tmnnevent-"], [class*=" tmnnevent-"]`)
-      .forEach((elem) => {
-        const classes = elem.className
-          .split(/\s+/)
-          .filter((c) => c && c.startsWith('tmnnevent-'));
-
-        classes.forEach((className) => {
-          const classNameSplit = className.split('-');
-          const methodName = classNameSplit[2];
-          const eventName = classNameSplit[1].slice(2);
-
-          const eventListener = (e) => {
-            let msg = {
-              method: methodName,
-              val: e.target.value,
-              element: e.target.outerHTML,
-            };
-
-            if (methodName === 'pub') {
-              msg['channel'] = classNameSplit[3];
-              msg['action'] = {
-                method: classNameSplit[4],
-                val: e.target.value,
-                element: e.target.outerHTML,
-              };
-
-              if (classNameSplit.length === 6) {
-                msg['action']['key'] = classNameSplit[5];
-              }
-            } else if (classNameSplit.length === 4) {
-              msg['key'] = classNameSplit[3];
-            }
-
-            // Possible values for classNameSplit:
-            // ["tmnnevent", inEvent, method]
-            // ["tmnnevent", inEvent, method, key]
-            // ["tmnnevent", inEvent, "pub", channel, method]
-            // ["tmnnevent", inEvent, "pub", channel, method, key]
-            socket.send(JSON.stringify(msg));
-          };
-
-          elem.addEventListener(eventName, eventListener);
-          inputListeners.push({ elem, eventName, eventListener });
-        });
-      });
+    addInputListeners();
 
     // Get all the initial values from the server.
     if (isReconnect) {
@@ -90,6 +94,7 @@ const connectWebSocket = (isReconnect = false) => {
     const diffs = JSON.parse(event.data);
 
     if (!diffs) return;
+
     for (const [k, v] of Object.entries(diffs)) {
       if (k !== 'error') {
         if (!(k in ['pub', 'sub', 'unsub', 'subbed_channels', 'set_state'])) {
@@ -110,6 +115,8 @@ const connectWebSocket = (isReconnect = false) => {
               switch (attr) {
                 case 'innerHtml':
                   elem.innerHTML = v;
+                  addInputListeners(elem);
+
                   break;
                 case 'innerText':
                   elem.innerText = v;
