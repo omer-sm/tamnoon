@@ -9,7 +9,7 @@ To set the initial state, change Tamnoon's `child_spec` in your supervision tree
 {Tamnoon, [[initial_state: %{msgs: [], name: "", curr_msg: ""}]}
 ```
 
-As you can see, we are storing the user's name, the message the user is currently typing, and the messages.
+As you can see, we are storing the user's name, the message the user is currently typing, and the messages. In addition, instead of providing a map, we can provide a function that returns a map. The function will be reran for each new client, keeping the initial state updated.
 
 _Note: The state should not have string keys, only atoms._
 
