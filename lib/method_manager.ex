@@ -95,4 +95,20 @@ defmodule Tamnoon.MethodManager do
   def diff(diffs, state) do
     {diffs, Map.merge(state, diffs, fn _key, _old, new -> new end)}
   end
+
+  @doc """
+  Triggers a method with the given name and payload. An additional timeout can be specified
+  to delay the triggering of the method.
+  """
+  @spec trigger_method(atom(), map(), non_neg_integer()) ::
+          :ok | :noconnect | :nosuspend | reference()
+  def trigger_method(method_name, payload, timeout \\ 0)
+
+  def trigger_method(method, req, 0) do
+    Process.send(self(), Jason.encode!(Map.merge(req, %{method: method})), [])
+  end
+
+  def trigger_method(method, req, timeout) do
+    Process.send_after(self(), Jason.encode!(Map.merge(req, %{method: method})), timeout)
+  end
 end

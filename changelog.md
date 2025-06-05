@@ -12,6 +12,8 @@
 
 - Added `Tamnoon.MethodManager.diff/2`.
 
+- Added `Tamnoon.MethodManager.trigger_method/3`.
+
 - Fixed bugs where unrelated HTML classes interfere with Tamnoon classes.
 
 - Added support for setting initial_state as a function, allowing the initial state to be recomputed for every client.
