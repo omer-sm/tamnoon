@@ -37,7 +37,7 @@ You may also create additional methods if you wish. To do so, you need to make a
 
 ```
 defmodule TamnoonChatroom.Methods do
-  use Tamnoon.Methods
+  import Tamnoon.MethodManager
 
   defmethod :log do
     IO.inspect(req)
@@ -49,18 +49,20 @@ end
 
 Here we are utilizing the `Tamnoon.MethodManager.defmethod/2` macro, imported by the `use Tamnoon.Methods` line. A method can access the `state` and `req` variables, and needs to return a tuple containing the value to return to the client (usually a map) and the updated state.
 
-Before we can test it, we need to set the module as our _methods module_. Inside your _application.ex_, change the `start` function as such:
+Before we can test it, we need to add the module to our _methods modules_. Inside your _application.ex_, change the `start` function as such:
 
 ```
 def start(_type, _args) do
     children = [
       {Tamnoon, [[initial_state: %{msgs: [], name: "", curr_msg: ""},
-      methods_module: TamnoonChatroom.Methods]]}
+      methods_modules: [TamnoonChatroom.Methods]]]}
     ]
     # ...
   end
 end
 ```
+
+_Note: `m:Tamnoon.Methods` will be automatically added to the methods modules list._
 
 To test it, let's create a button to trigger the method. add the following to your `"app.html.heex"` file:
 
