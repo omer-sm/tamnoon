@@ -1,6 +1,6 @@
 # Changelog
 
-### V1.0.0-a.4
+### V1.0.0-a.4 (05.06.25)
 
 - Added **live reload**. When not disabled, Tamnoon will automatically recompile when new connections are made (including existing connections refreshing the page). 
 
