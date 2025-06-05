@@ -64,4 +64,21 @@ defmodule Tamnoon.MethodManager do
 
     {:reply, {:text, elem(Jason.encode(ret_val, []), 1)}, new_state}
   end
+
+  @doc """
+  Returns a tuple containing the diffs and the new state after applying the diffs.
+  Can be used in method handlers to update a value easily.
+  ## Example
+  ```
+  defmethod :change_something do
+    diffs = %{some_key: "New value", another_key: "Another value"}
+
+    diff(diffs, state)
+  end
+  ```
+  """
+  @spec diff(map(), map()) :: {map(), map()}
+  def diff(diffs, state) do
+    {diffs, Map.merge(state, diffs, fn _key, _old, new -> new end)}
+  end
 end
