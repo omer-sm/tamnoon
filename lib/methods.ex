@@ -4,9 +4,7 @@ defmodule Tamnoon.Methods do
   working - basic state management (with `tmnn_get/2` and `tmnn_update/2`) and basic handling of
   PubSub channels (via `tmnn_sub/2`, `tmnn_unsub/2`, `tmnn_pub/2`, `tmnn_subbed_channels/2`)
   > #### Using the module {: .info}
-  > When you `use Tamnoon.Methods`, every method in this module will be imported for you,
-  > letting you conveniently make a _methods module_. See `m:Tamnoon.MethodManager` for
-  > details on making one.
+  > Since v1.0.0-a.4, you should import `Tamnoon.MethodManager` in your _methods modules_ instead of using this module directly.
 
   _Note: in the documentation of the default methods, the term 'returns' is used both
   to describe the return value of the function and the value of the server's response._
