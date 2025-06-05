@@ -21,6 +21,7 @@ defmodule Tamnoon do
   - `methods_modules`: The modules where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
   - `router`: The router module (see `m:Plug.Router`). Defaults to `m:Tamnoon.Router`.
   - `debug_mode`: Whether to enable debug mode. If set to `true`, Tamnoon will log debug information about the requests and state. Defaults to `false`.
+  - `live_reload`: Whether to enable live reload. Defaults to `true`. If set to `true`, Tamnoon will automatically recompile when new connections are made (or when a client refreshes the page).
   - `socket_handler`: The handler module for WebSocket requests. Usually doesn't need to be overriden. Defaults to `m:Tamnoon.SocketHandler`.
   - `protocol_opts`: Whether Tamnoon uses HTTP or HTTPS. See `t:tamnoon_protocol_opts/0` for more info.
   """
@@ -30,6 +31,7 @@ defmodule Tamnoon do
           methods_modules: list(module()),
           router: module(),
           debug_mode: boolean(),
+          live_reload: boolean(),
           socket_handler: module(),
           protocol_opts: tamnoon_protocol_opts()
         ]
@@ -99,7 +101,8 @@ defmodule Tamnoon do
         meta: [
           initial_state: Keyword.get(server_opts, :initial_state, %{}),
           methods_modules: [Tamnoon.Methods | Keyword.get(server_opts, :methods_modules, [])],
-          debug_mode: Keyword.get(server_opts, :debug_mode, false)
+          debug_mode: Keyword.get(server_opts, :debug_mode, false),
+          live_reload: Keyword.get(server_opts, :live_reload, true)
         ]
       )
     ]

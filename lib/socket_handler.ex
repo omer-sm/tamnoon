@@ -17,6 +17,9 @@ defmodule Tamnoon.SocketHandler do
   @spec init(:cowboy_req.req(), map()) ::
           {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map(), opts :: map()}
   def init(req, _state) do
+    if (is_live_reload_on?()) do
+      if (IEx.Helpers.recompile() == :ok), do: Logger.info("Live reload: recompiled successfully.")
+    end
     {:cowboy_websocket, req, initial_state(), %{idle_timeout: 120_000}}
   end
 
@@ -81,5 +84,11 @@ defmodule Tamnoon.SocketHandler do
       do:
         Tamnoon.Registry
         |> Registry.meta(:debug_mode)
+        |> elem(1)
+
+  defp is_live_reload_on?(),
+      do:
+        Tamnoon.Registry
+        |> Registry.meta(:live_reload)
         |> elem(1)
 end

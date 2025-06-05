@@ -2,11 +2,13 @@
 
 ### V1.0.0-a.4
 
-- Changed method modules such that now multiple modules are used instead of a singular one. Deprecated `Tamnoon.Methods.__using__/1` because of this too.
+- Added **live reload**. When not disabled, Tamnoon will automatically recompile when new connections are made (including existing connections refreshing the page). 
+
+- Changed method modules such that now multiple modules are used instead of a singular one. Deprecated the `__using__` macro of `m:Tamnoon.Methods` because of this too.
 
 - Added the `tamnoon.override_root` Mix task. The task generates a router and a root component for you.
 
-- Added debug mode. Enabling it will log the payload and current state whenever a method is triggered.
+- Added **debug mode**. Enabling it will log the payload and current state whenever a method is triggered.
 
 - Added `Tamnoon.MethodManager.diff/2`.
 
