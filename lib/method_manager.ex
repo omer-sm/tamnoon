@@ -7,6 +7,7 @@ defmodule Tamnoon.MethodManager do
   > in your _methods module_. Then, you can use the `defmethod/2` macro to implement handling
   > of the methods.
   """
+  require Logger
 
   @doc """
   Defines a function named `tmnn_[name]`. Functions with this prefix in your _methods module_
@@ -42,27 +43,40 @@ defmodule Tamnoon.MethodManager do
   The function used by `Tamnoon.SocketHandler.websocket_handle/2` to route the requests
   to the appropriate method handler.
   """
-  @spec route_request(module(), map(), map()) ::
+  @spec route_request(list(module()), map(), map()) ::
           {:reply, {:text, return_value :: String.t()}, new_state :: map()}
-  def route_request(methods_module, payload, state) do
+  def route_request(methods_modules, payload, state) do
     method = payload["method"]
 
-    {func, _arity} =
-      methods_module.__info__(:functions)
-      |> Enum.find(fn {name, arity} ->
-        arity == 2 && Atom.to_string(name) == "tmnn_" <> method
+    found_func_info =
+      Enum.find_value(methods_modules, fn methods_module ->
+        func_info =
+          methods_module.__info__(:functions)
+          |> Enum.find(fn {name, arity} ->
+            arity == 2 && Atom.to_string(name) == "tmnn_" <> method
+          end)
+
+        if func_info, do: {methods_module, func_info}, else: nil
       end)
 
-    {{ret_val, new_state}, []} =
-      quote do
-        unquote(methods_module).unquote(func)(
-          unquote(Macro.escape(payload)),
-          unquote(Macro.escape(state))
-        )
-      end
-      |> Code.eval_quoted()
+    if found_func_info == nil do
+      Logger.error("Method #{method} not found in any methods module.")
 
-    {:reply, {:text, elem(Jason.encode(ret_val, []), 1)}, new_state}
+      {:reply, {:text, elem(Jason.encode(%{error: "Method #{method} not found."}, []), 1)}, state}
+    else
+      {methods_module, {func, _arity}} = found_func_info
+
+      {{ret_val, new_state}, []} =
+        quote do
+          unquote(methods_module).unquote(func)(
+            unquote(Macro.escape(payload)),
+            unquote(Macro.escape(state))
+          )
+        end
+        |> Code.eval_quoted()
+
+      {:reply, {:text, elem(Jason.encode(ret_val, []), 1)}, new_state}
+    end
   end
 
   @doc """

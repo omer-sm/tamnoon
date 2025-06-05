@@ -2,6 +2,8 @@
 
 ### V1.0.0-a.4
 
+- Changed method modules such that now multiple modules are used instead of a singular one. Deprecated `Tamnoon.Methods.__using__/1` because of this too.
+
 - Added the `tamnoon.override_root` Mix task. The task generates a router and a root component for you.
 
 - Added debug mode. Enabling it will log the payload and current state whenever a method is triggered.

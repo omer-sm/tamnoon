@@ -47,7 +47,7 @@ defmodule Tamnoon.SocketHandler do
       Logger.debug("DBG | Current state: #{inspect(state)}")
     end
 
-    Tamnoon.MethodManager.route_request(methods_module(), payload, state)
+    Tamnoon.MethodManager.route_request(methods_modules(), payload, state)
   end
 
   @doc """
@@ -71,10 +71,10 @@ defmodule Tamnoon.SocketHandler do
         value -> value
       end)
 
-  defp methods_module(),
+  defp methods_modules(),
     do:
       Tamnoon.Registry
-      |> Registry.meta(:methods_module)
+      |> Registry.meta(:methods_modules)
       |> elem(1)
 
   defp is_debug_mode?(),

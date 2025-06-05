@@ -11,6 +11,8 @@ defmodule Tamnoon.Methods do
   _Note: in the documentation of the default methods, the term 'returns' is used both
   to describe the return value of the function and the value of the server's response._
   """
+
+  @deprecated "since v1.0.0-a.4, import `Tamnoon.MethodManager` instead of using this module."
   defmacro __using__(_opts \\ []) do
     quote do
       import Tamnoon.MethodManager

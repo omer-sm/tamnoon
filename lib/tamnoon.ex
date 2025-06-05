@@ -18,7 +18,7 @@ defmodule Tamnoon do
   Options for initializing Tamnoon. Defaults to `[8000, Tamnoon.Router, Tamnoon.SocketHandler, Tamnoon.Methods, %{}]`.
   - `port`: The port Tamnoon will run on. Defaults to _8000_.
   - `initial_state`: A map, or a function that returns one, representing the state new clients will start with. Defaults to an empty map.
-  - `methods_module`: The module where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
+  - `methods_modules`: The modules where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
   - `router`: The router module (see `m:Plug.Router`). Defaults to `m:Tamnoon.Router`.
   - `debug_mode`: Whether to enable debug mode. If set to `true`, Tamnoon will log debug information about the requests and state. Defaults to `false`.
   - `socket_handler`: The handler module for WebSocket requests. Usually doesn't need to be overriden. Defaults to `m:Tamnoon.SocketHandler`.
@@ -27,7 +27,7 @@ defmodule Tamnoon do
   @type tamnoon_opts() :: [
           initial_state: (-> map()) | map(),
           port: number(),
-          methods_module: module(),
+          methods_modules: list(module()),
           router: module(),
           debug_mode: boolean(),
           socket_handler: module(),
@@ -98,7 +98,7 @@ defmodule Tamnoon do
         name: Tamnoon.Registry,
         meta: [
           initial_state: Keyword.get(server_opts, :initial_state, %{}),
-          methods_module: Keyword.get(server_opts, :methods_module, Tamnoon.Methods),
+          methods_modules: [Tamnoon.Methods | Keyword.get(server_opts, :methods_modules, [])],
           debug_mode: Keyword.get(server_opts, :debug_mode, false)
         ]
       )
