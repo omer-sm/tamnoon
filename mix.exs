@@ -50,7 +50,6 @@ defmodule Tamnoon.MixProject do
     ]
   end
 
-  defp description, do: "A simple, customizable framework for Websocket server
-  implementations. Make Elixir power your favorite front-end framework effortlessly!"
+  defp description, do: "A simplicity-first web framework for Elixir, designed to make building web applications easy and enjoyable."
 
 end
