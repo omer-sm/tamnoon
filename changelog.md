@@ -18,6 +18,8 @@
 
 - Added support for setting initial_state as a function, allowing the initial state to be recomputed for every client.
 
+- Silenced the _unused variable "req"_ warnings for methods. 
+
 
 ### V1.0.0-a.3 (25.07.24)
 
