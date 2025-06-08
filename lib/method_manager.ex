@@ -14,7 +14,7 @@ defmodule Tamnoon.MethodManager do
   will automatically be added to the possible methods when invoking `route_request/3`.
   Inside the created function, you can access the state of the client and the request
   object by the `state` and `req` variables respectively.
-  Method handlers must return a tuple of `{return_value, new_state}`.
+  Method handlers must return a tuple of `{return_value, new_state}` (note: use `diff/2` for a shorter version).
   ## Example
   ```
   defmethod :get do
