@@ -63,9 +63,9 @@ defmodule Tamnoon.MethodManager do
       end)
 
     if found_func_info == nil do
-      Logger.error("Method #{method} not found in any methods module.")
+      Logger.error("Method '#{method}' not found in any methods module.")
 
-      {:reply, {:text, elem(Jason.encode(%{error: "Method #{method} not found."}, []), 1)}, state}
+      {:reply, {:text, elem(Jason.encode(%{error: "Method '#{method}' not found."}, []), 1)}, state}
     else
       {methods_module, {func, _arity}} = found_func_info
 
