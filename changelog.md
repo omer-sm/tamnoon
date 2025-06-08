@@ -1,6 +1,20 @@
 # Changelog
 
-### V1.0.0-a.4 (05.06.25)
+### v1.0.0-a.5
+
+- Removed the _app-container_ div from the default root, and fixed the indentation in its HTML.
+
+- Fixed a bug where `Tamnoon.MethodManager.defmethod/2` caused a _no match found_ error.
+
+
+#### Minor changes:
+
+- Removed the (empty) documentation page for `m:Tamnoon.Components.Root`.
+
+- Altered the "no method found" error message to be clearer. 
+
+
+### v1.0.0-a.4 (05.06.25)
 
 - Added **live reload**. When not disabled, Tamnoon will automatically recompile when new connections are made (including existing connections refreshing the page). 
 
@@ -21,7 +35,7 @@
 - Silenced the _unused variable "req"_ warnings for methods. 
 
 
-### V1.0.0-a.3 (25.07.24)
+### v1.0.0-a.3 (25.07.24)
 
 - Added support for running Tamnoon over HTTPS.
 
@@ -32,7 +46,7 @@
 - Updated the client script to keep a copy of the state which will be sent to the server on a reconnect. _Note: this also means that string keys in the state are now not supported, as the state will have its keys converted to atoms on the reconnect._
 
 
-#### Minor Changes:
+#### Minor changes:
 
 - Added `Tamnoon.Methods.tmnn_set_state/2`.
 
@@ -71,6 +85,7 @@
 - Added the _keep\_alive_ method (`Tamnoon.Methods.tmnn_keep_alive/2`) that is invoked every 55 seconds by the client in order to prevent idle timeouts.
 
 - Moved the WebSocket connection script to a separate file, and updated the default router (`m:Tamnoon.Router`) to serve a default root layout.
+
 
 #### Minor changes:
 
