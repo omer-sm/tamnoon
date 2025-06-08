@@ -1,4 +1,5 @@
 defmodule Tamnoon.Components.Root do
+  @moduledoc false
   @behaviour Tamnoon.Component
 
   @impl true
