@@ -7,19 +7,17 @@ defmodule Tamnoon.Components.Root do
     <!DOCTYPE html>
     <html lang="en">
 
-    <head>
-      <meta name="description" content="Webpage description goes here" />
-      <meta charset="utf-8">
-      <title>Tamnoon App</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <script src="ws_connect.js"></script>
-    </head>
+      <head>
+        <meta name="description" content="Webpage description goes here" />
+        <meta charset="utf-8">
+        <title>Tamnoon App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="ws_connect.js"></script>
+      </head>
 
-    <body>
-        <div class="app-container">
-            <%= r.("app.html.heex") %>
-        </div>
-    </body>
+      <body>
+          <%= r.("app.html.heex") %>
+      </body>
     </html>
     """
   end
