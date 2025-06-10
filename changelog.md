@@ -15,6 +15,8 @@
 
 - Altered the "no method found" error message to be clearer. 
 
+- Made the `m:Tamnoon.Component` documentation more concise.
+
 
 ### v1.0.0-a.4 (05.06.25)
 
