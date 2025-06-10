@@ -34,6 +34,7 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
           plug :dispatch
 
           get "/" do
+            Tamnoon.LiveReload.try_recompile()
             Tamnoon.Compiler.build_from_root(#{app_name}.Components.Root)
             send_file(conn, 200, "tamnoon_out/app.html")
           end

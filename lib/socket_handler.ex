@@ -17,9 +17,6 @@ defmodule Tamnoon.SocketHandler do
   @spec init(:cowboy_req.req(), map()) ::
           {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map(), opts :: map()}
   def init(req, _state) do
-    if (is_live_reload_on?()) do
-      if (IEx.Helpers.recompile() == :ok), do: Logger.info("Live reload: recompiled successfully.")
-    end
     {:cowboy_websocket, req, initial_state(), %{idle_timeout: 120_000}}
   end
 
@@ -45,7 +42,7 @@ defmodule Tamnoon.SocketHandler do
   def websocket_handle({:text, json}, state) do
     payload = Jason.decode!(json)
 
-    if (is_debug_mode?()) do
+    if is_debug_mode?() do
       Logger.debug("DBG | Received payload: #{inspect(payload)}")
       Logger.debug("DBG | Current state: #{inspect(state)}")
     end
@@ -81,14 +78,8 @@ defmodule Tamnoon.SocketHandler do
       |> elem(1)
 
   defp is_debug_mode?(),
-      do:
-        Tamnoon.Registry
-        |> Registry.meta(:debug_mode)
-        |> elem(1)
-
-  defp is_live_reload_on?(),
-      do:
-        Tamnoon.Registry
-        |> Registry.meta(:live_reload)
-        |> elem(1)
+    do:
+      Tamnoon.Registry
+      |> Registry.meta(:debug_mode)
+      |> elem(1)
 end
