@@ -2,7 +2,7 @@ const url = new URL(document.location.href);
 url.protocol = url.protocol === 'http:' ? 'ws:' : 'wss:';
 url.pathname += 'ws';
 const wsUrl = url.toString();
-const curr_state = {};
+const currState = {};
 let socket;
 const inputListeners = [];
 
@@ -77,7 +77,7 @@ const connectWebSocket = (isReconnect = false) => {
       socket.send(
         JSON.stringify({
           method: 'set_state',
-          state: curr_state,
+          state: currState,
         })
       );
     } else {
@@ -98,7 +98,7 @@ const connectWebSocket = (isReconnect = false) => {
     for (const [k, v] of Object.entries(diffs)) {
       if (k !== 'error') {
         if (!(k in ['pub', 'sub', 'unsub', 'subbed_channels', 'set_state'])) {
-          curr_state[k] = v;
+          currState[k] = v;
         }
 
         // Update the elements with the class that matches the key.
