@@ -2,6 +2,8 @@
 
 ### v1.0.0-a.5
 
+- Made Tamnoon HEEx values invertable: for example, assigning @not-some_value to an attribute will turn it `true` when `some_value` is `false`, and vice versa.
+
 - Removed the _app-container_ div from the default root, and fixed the indentation in its HTML.
 
 - Fixed a bug where `Tamnoon.MethodManager.defmethod/2` caused a _no match found_ error.

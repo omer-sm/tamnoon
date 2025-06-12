@@ -103,32 +103,33 @@ const connectWebSocket = (isReconnect = false) => {
 
         // Update the elements with the class that matches the key.
         document
-          .querySelectorAll(`[class^="tmnn-${k}-"], [class*=" tmnn-${k}-"]`)
+          .querySelectorAll(`[class^="tmnn-${k}-"], [class*=" tmnn-${k}-"], [class^="tmnn-not-${k}-"], [class*=" tmnn-not-${k}-"]`)
           .forEach((elem) => {
             const classes = elem.className
               .split(/\s+/)
-              .filter((c) => c && c.startsWith(`tmnn-${k}-`));
+              .filter((c) => c && new RegExp(`^tmnn-(?:not-)?${k}-`).test(c));
 
             classes.forEach((className) => {
               const attr = className.slice(className.lastIndexOf('-') + 1);
+              const newValue = className.startsWith('tmnn-not-') ? !v : v;
 
               switch (attr) {
                 case 'innerHtml':
-                  elem.innerHTML = v;
+                  elem.innerHTML = newValue;
                   addInputListeners(elem);
 
                   break;
                 case 'innerText':
-                  elem.innerText = v;
+                  elem.innerText = newValue;
                   break;
                 case 'value':
-                  elem.value = v;
+                  elem.value = newValue;
                   break;
                 case 'hidden':
-                  elem.hidden = v;
+                  elem.hidden = newValue;
                   break;
                 default:
-                  elem.setAttribute(attr, v);
+                  elem.setAttribute(attr, newValue);
                   break;
               }
             });

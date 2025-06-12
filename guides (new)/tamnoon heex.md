@@ -8,13 +8,16 @@ When we want to read a variable from the state in our app (in this example we wi
 
 ```
 <p hidden=@hidep> can you see me? </p>
+<p hidden=@not-hidep> can you see me? </p>
 <p>@name</p>
 <p>@raw-name</p>
 ```
 
-- The first _<p>_ will be hidden if we have a method that returns `%{hidep: true}` to the client. We don't need to have a variable named _hidep_ in our state for that work, however most often you will want to.
+- The first _<p>_ will be hidden if we have a method that returns `%{hidep: true}` to the client. _Note: We don't need to have a variable named 'hidep' in our state for that work, however most often you will want to._
 
-- The second _<p>_ will have its text updated every time the _name_ variable changes. 
+- The second _<p>_ will be hidden if a method returns `%{hidep: false}` to the client. (Meaning it will invert the value)
+
+- The third _<p>_ will have its text updated every time the _name_ variable changes. 
 
 - The last _<p>_ will have its inner _HTML_ updated every time _name_ changes. This is a way to dynamically switch between components.
 

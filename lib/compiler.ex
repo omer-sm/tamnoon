@@ -64,35 +64,39 @@ defmodule Tamnoon.Compiler do
   """
   @spec parse_tmnn_heex(String.t()) :: String.t()
   def parse_tmnn_heex(compiled_heex) do
-    Regex.replace(~r/< *\w *[^>]*> *(?:@([-_a-z\d]+))?/m, compiled_heex, fn x, inner_value ->
-      attr_classes =
-        get_component_attrs(x, inner_value)
-        |> Enum.reduce("", fn {key, attrs}, acc ->
-          acc <>
-            Enum.reduce(attrs, "", fn attr, acc ->
-              if String.starts_with?(attr, "on") do
-                acc <> " tmnnevent-" <> "#{attr}-" <> key
-              else
-                acc <> " tmnn-" <> key <> "-#{attr}"
-              end
-            end)
+    Regex.replace(
+      ~r/< *\w *[^>]*> *(?:@([-_a-z\d]+))?/m,
+      compiled_heex,
+      fn x, inner_value ->
+        attr_classes =
+          get_component_attrs(x, inner_value)
+          |> Enum.reduce("", fn {key, attrs}, acc ->
+            acc <>
+              Enum.reduce(attrs, "", fn attr, acc ->
+                if String.starts_with?(attr, "on") do
+                  acc <> " tmnnevent-" <> "#{attr}-" <> key
+                else
+                  acc <> " tmnn-" <> key <> "-#{attr}"
+                end
+              end)
+          end)
+
+        x = Regex.replace(~r/(?<attr>[a-z\d]+)=@(?<key>[-_a-z\d]+)/m, x, "")
+        x = Regex.replace(~r/>( *@[-_a-z\d]+)/m, x, ">")
+
+        x =
+          if x =~ ~r/class="[^"]*"/ || attr_classes == "" do
+            x
+          else
+            [a, b] = Regex.split(~r/< *\w+/, x, parts: 2, include_captures: true, trim: true)
+            a <> " class=\"\" " <> b
+          end
+
+        Regex.replace(~r/class="([^"]*)"/, x, fn _, classes ->
+          "class=\"#{classes}#{attr_classes}\""
         end)
-
-      x = Regex.replace(~r/(?<attr>[a-z\d]+)=@(?<key>[-_a-z\d]+)/m, x, "")
-      x = Regex.replace(~r/>( *@[-_a-z\d]+)/m, x, ">")
-
-      x =
-        if x =~ ~r/class="[^"]*"/ || attr_classes == "" do
-          x
-        else
-          [a, b] = Regex.split(~r/< *\w+/, x, parts: 2, include_captures: true, trim: true)
-          a <> " class=\"\" " <> b
-        end
-
-      Regex.replace(~r/class="([^"]*)"/, x, fn _, classes ->
-        "class=\"#{classes}#{attr_classes}\""
-      end)
-    end)
+      end
+    )
   end
 
   defp get_component_attrs(component, "") do
