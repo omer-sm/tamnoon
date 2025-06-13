@@ -15,7 +15,7 @@
 
 - Fixed a bug where live reload did not reload some changes for the client that triggered it.
 
-- Removed the (empty) documentation page for `m:Tamnoon.Components.Root`.
+- Removed the (empty) documentation page for the default root component.
 
 - Altered the "no method found" error message to be clearer. 
 
