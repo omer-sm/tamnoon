@@ -6,6 +6,12 @@ Out of the box, Tamnoon comes with built-in state management and PubSub function
 
 _Note: If you only wish to see an example of Tamnoon's workflow, check out the Wrapping Up guide._
 
+
+## Important Note
+
+The guides were made for earlier versions, so they might not be fully up to date. New and updated guides will be coming with the full v1 release.
+
+
 ## Guides Summary
 
 Below is a rundown of the contents of every guide:
