@@ -1,6 +1,6 @@
 # Changelog
 
-### v1.0.0-a.5
+### v1.0.0-a.5 (13.06.25)
 
 - Made Tamnoon HEEx values invertable: for example, assigning @not-some_value to an attribute will turn it `true` when `some_value` is `false`, and vice versa.
 
