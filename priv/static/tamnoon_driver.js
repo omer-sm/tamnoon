@@ -119,17 +119,34 @@ const connectWebSocket = (isReconnect = false) => {
                   addInputListeners(elem);
 
                   break;
+
                 case 'innerText':
                   elem.innerText = newValue;
+
                   break;
+
                 case 'value':
                   elem.value = newValue;
+
                   break;
+
                 case 'hidden':
                   elem.hidden = newValue;
+
                   break;
+
+                case 'disabled':
+                  if (newValue) {
+                    elem.setAttribute('disabled', newValue);
+                  } else {
+                    elem.removeAttribute('disabled');
+                  }
+
+                  break;
+
                 default:
                   elem.setAttribute(attr, newValue);
+
                   break;
               }
             });
