@@ -103,7 +103,9 @@ const connectWebSocket = (isReconnect = false) => {
 
         // Update the elements with the class that matches the key.
         document
-          .querySelectorAll(`[class^="tmnn-${k}-"], [class*=" tmnn-${k}-"], [class^="tmnn-not-${k}-"], [class*=" tmnn-not-${k}-"]`)
+          .querySelectorAll(
+            `[class^="tmnn-${k}-"], [class*=" tmnn-${k}-"], [class^="tmnn-not-${k}-"], [class*=" tmnn-not-${k}-"]`
+          )
           .forEach((elem) => {
             const classes = elem.className
               .split(/\s+/)
@@ -127,6 +129,17 @@ const connectWebSocket = (isReconnect = false) => {
 
                 case 'value':
                   elem.value = newValue;
+
+                  break;
+
+                case 'class':
+                  const tmnnClasses = 
+                    [...elem.classList]
+                    .filter(
+                      (c) => c.startsWith('tmnn-') || c.startsWith('tmnnevent-')
+                    );
+
+                  elem.className = tmnnClasses.join(' ') + ' ' + newValue;
 
                   break;
 

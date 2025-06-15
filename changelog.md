@@ -12,6 +12,8 @@
 
 - Fixed a bug where after setting an element's `disabled` attribute to a state value, changes to it wouldn't re-enable the element properly.
 
+- Setting an element's `class` to a state value will now not override Tamnoon's listener classes.
+
 - Changed the `root` component that gets generated with `m:Mix.Tasks.Tamnoon.OverrideRoot` to not try rendering an `app.html.heex` component by default.
 
 
