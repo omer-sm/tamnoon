@@ -74,7 +74,7 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
               </head>
 
               <body>
-                  <%= r.("app.html.heex") %>
+                  <h1>Welcome to your Tamnoon app!</h1>
               </body>
             </html>
             \"\"\"

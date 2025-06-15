@@ -10,6 +10,8 @@
 
 - Changed methods to accept the `"value"` key for the value instead of `"val"`.
 
+- Changed the `root` component that gets generated with `m:Mix.Tasks.Tamnoon.OverrideRoot` to not try rendering an `app.html.heex` component by default.
+
 
 ### v1.0.0-a.5 (13.06.25)
 
