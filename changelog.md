@@ -10,6 +10,8 @@
 
 - Changed methods to accept the `"value"` key for the value instead of `"val"`.
 
+- Changed `sub` and `unsub` to accept the channel name via the `"channel"` key.
+
 - Fixed a bug where after setting an element's `disabled` attribute to a state value, changes to it wouldn't re-enable the element properly.
 
 - Setting an element's `class` to a state value will now not override Tamnoon's listener classes.

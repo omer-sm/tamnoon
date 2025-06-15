@@ -129,9 +129,9 @@ defmodule Tamnoon.Methods do
 
   @doc false
   def sub(req, state) do
-    if !is_subbed?(req["key"]) do
+    if !is_subbed?(req["channel"]) do
       Tamnoon.Registry
-      |> Registry.register(req["key"], {})
+      |> Registry.register(req["channel"], {})
     end
 
     {%{sub: :ok}, state}
@@ -140,12 +140,12 @@ defmodule Tamnoon.Methods do
   @doc false
   def unsub(req, state) do
     cond do
-      req["key"] == "clients" ->
+      req["channel"] == "clients" ->
         {%{error: "Error: can't unsub from clients channel"}, state}
 
-      is_subbed?(req["key"]) ->
+      is_subbed?(req["channel"]) ->
         Tamnoon.Registry
-        |> Registry.unregister(req["key"])
+        |> Registry.unregister(req["channel"])
 
         {%{unsub: :ok}, state}
 

@@ -35,11 +35,14 @@ const addInputListeners = (rootElement = document) => {
               element: e.target.outerHTML,
             };
 
+            const isChannelMethod = ['sub', 'unsub'].includes(msg['action']['method']);
+
             if (classNameSplit.length === 6) {
-              msg['action']['key'] = classNameSplit[5];
+              msg['action'][isChannelMethod ? 'channel' : 'key'] = classNameSplit[5];
             }
           } else if (classNameSplit.length === 4) {
-            msg['key'] = classNameSplit[3];
+            const isChannelMethod = ['sub', 'unsub'].includes(methodName);
+            msg[isChannelMethod ? 'channel' : 'key'] = classNameSplit[3];
           }
 
           // Possible values for classNameSplit:
