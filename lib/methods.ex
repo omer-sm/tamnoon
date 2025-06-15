@@ -50,7 +50,7 @@ defmodule Tamnoon.Methods do
 
   @doc """
   Updates the value of the item with the key at the `"key"` field on the request,
-  setting it to the value at the `"val"` key. Returns a tuple with the updated field and
+  setting it to the value at the `"value"` key. Returns a tuple with the updated field and
   the state, or an error string if there is no such item.
   """
   @spec tmnn_update(map(), map()) ::
@@ -121,7 +121,7 @@ defmodule Tamnoon.Methods do
     key = get_key(req, state)
 
     if key != nil do
-      {%{key => req["val"]}, Map.put(state, key, req["val"])}
+      {%{key => req["value"]}, Map.put(state, key, req["value"])}
     else
       {%{error: "Error: no matching key"}, state}
     end

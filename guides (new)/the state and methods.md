@@ -29,7 +29,7 @@ When we want something to happen, we need to trigger _methods_. Methods are the 
 
 - `subbed_channels`: Returns a list of the channels the client is currently subscribed to.
 
-**Tamnoon abstracts this whole process, so you don't need to worry about it.** However, FYI: methods are triggered by the client sending a json object to the server. The `update` and `get` methods both expect a field with the key `"key"`, which is a name of a variable in the state. `update` also expects a field with the key `"val"` which is the new value of the variable.
+**Tamnoon abstracts this whole process, so you don't need to worry about it.** However, FYI: methods are triggered by the client sending a json object to the server. The `update` and `get` methods both expect a field with the key `"key"`, which is a name of a variable in the state. `update` also expects a field with the key `"value"` which is the new value of the variable.
 
 ## Custom Methods
 
@@ -76,7 +76,7 @@ For now, don't worry about the _onclick=@log_ part. That is Tamnoon HEEx, which 
 %{
   "element" => "<button class=\" tmnnevent-onclick-log\">push me!</button>",
   "method" => "log",
-  "val" => ""
+  "value" => ""
 }
 %{name: "", msgs: [], curr_msg: ""}
 ```

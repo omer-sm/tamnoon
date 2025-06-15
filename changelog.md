@@ -8,6 +8,8 @@
 
 - Renamed the driver script to _tamnoon\_driver.js_ (was _ws\_connect.js_).
 
+- Changed methods to accept the `"value"` key for the value instead of `"val"`.
+
 
 ### v1.0.0-a.5 (13.06.25)
 
