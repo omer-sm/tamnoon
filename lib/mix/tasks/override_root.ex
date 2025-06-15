@@ -39,8 +39,8 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
             send_file(conn, 200, "tamnoon_out/app.html")
           end
 
-          get "/ws_connect.js" do
-            send_file(conn, 200, Application.app_dir(:tamnoon, "priv/static/ws_connect.js"))
+          get "/tamnoon_driver.js" do
+            send_file(conn, 200, Application.app_dir(:tamnoon, "priv/static/tamnoon_driver.js"))
           end
 
           match _ do
@@ -70,7 +70,7 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
                 <meta charset="utf-8">
                 <title>Tamnoon App</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1">
-                <script src="ws_connect.js"></script>
+                <script src="tamnoon_driver.js"></script>
               </head>
 
               <body>

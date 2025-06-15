@@ -14,8 +14,8 @@ defmodule Tamnoon.Router do
     send_file(conn, 200, "tamnoon_out/app.html")
   end
 
-  get "/ws_connect.js" do
-    send_file(conn, 200, Application.app_dir(:tamnoon, "priv/static/ws_connect.js"))
+  get "/tamnoon_driver.js" do
+    send_file(conn, 200, Application.app_dir(:tamnoon, "priv/static/tamnoon_driver.js"))
   end
 
   match _ do

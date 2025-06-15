@@ -4,7 +4,9 @@
 
 #### Minor changes:
 
-- Changed debug mode to be able to log only the `req` or `state`.
+- Changed debug mode to be able to log only the `req` or `state`, and changed the debug messages formatting.
+
+- Renamed the driver script to _tamnoon\_driver.js_ (was _ws\_connect.js_).
 
 
 ### v1.0.0-a.5 (13.06.25)
