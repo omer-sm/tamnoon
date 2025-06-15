@@ -41,10 +41,14 @@ defmodule Tamnoon.SocketHandler do
           {:reply, {:text, return_val :: String.t()}, new_state :: map()}
   def websocket_handle({:text, json}, state) do
     payload = Jason.decode!(json)
+    debug_mode = debug_mode()
 
-    if is_debug_mode?() do
-      Logger.debug("DBG | Received payload: #{inspect(payload)}")
-      Logger.debug("DBG | Current state: #{inspect(state)}")
+    if (debug_mode == :req || debug_mode == :all) do
+      Logger.debug("Received payload: #{inspect(payload)}")
+    end
+
+    if (debug_mode == :state || debug_mode == :all) do
+      Logger.debug("Current state: #{inspect(state)}")
     end
 
     Tamnoon.MethodManager.route_request(methods_modules(), payload, state)
@@ -77,7 +81,7 @@ defmodule Tamnoon.SocketHandler do
       |> Registry.meta(:methods_modules)
       |> elem(1)
 
-  defp is_debug_mode?(),
+  defp debug_mode(),
     do:
       Tamnoon.Registry
       |> Registry.meta(:debug_mode)
