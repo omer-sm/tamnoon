@@ -23,7 +23,7 @@ const addInputListeners = (rootElement = document) => {
         const eventListener = (e) => {
           let msg = {
             method: methodName,
-            value: e.target.value,
+            value: e.target.value ?? e.target.getAttribute('value'),
             element: e.target.outerHTML,
           };
 
@@ -31,7 +31,7 @@ const addInputListeners = (rootElement = document) => {
             msg['channel'] = classNameSplit[3];
             msg['action'] = {
               method: classNameSplit[4],
-              value: e.target.value,
+              value: e.target.value ?? e.target.getAttribute('value'),
               element: e.target.outerHTML,
             };
 
