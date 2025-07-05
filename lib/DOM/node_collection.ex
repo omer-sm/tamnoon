@@ -19,6 +19,7 @@ defmodule Tamnoon.DOM.NodeCollection do
   alias Tamnoon.DOM
   import DOM
 
+  @derive Jason.Encoder
   @enforce_keys [:selector_type, :selector_value]
   defstruct [:selector_type, :selector_value]
 
