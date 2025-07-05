@@ -9,11 +9,11 @@ defmodule Tamnoon.DOM.Node do
   ## Fields
 
     * `:selector_type` – an atom indicating the type of selector.
-      - Expected values: `:id`, `:xpath_node`, `:from_string`, `:first_child`, `:last_child`.
+      - Expected values: `:id`, `:xpath`, `:from_string`, `:first_child`, `:last_child`.
 
     * `:selector_value` – the value associated with the selector.
       - `:id`: a `t:String.t/0` of the id to select.
-      - `:xpath_node`: a `t:String.t/0` of the node's xpath.
+      - `:xpath`: a `t:String.t/0` of the node's xpath.
       - `:from_string`: a `t:String.t/0` representing the HTML element.
       - `:first_child` and `:last_child`: a `t:Tamnoon.DOM.NodeCollection.t/0` representing the collection to query.
   """
@@ -25,11 +25,11 @@ defmodule Tamnoon.DOM.Node do
   @enforce_keys [:selector_type, :selector_value]
   defstruct [:selector_type, :selector_value]
 
-  @single_selector_types [:id, :xpath_node, :from_string]
+  @single_selector_types [:id, :xpath, :from_string]
   @collection_selector_types [:first_child, :last_child]
 
   @type t :: %__MODULE__{
-          selector_type: :id | :xpath_node | :from_string | :first_child | :last_child,
+          selector_type: :id | :xpath | :from_string | :first_child | :last_child,
           selector_value: String.t() | Tamnoon.DOM.NodeCollection.t()
         }
 

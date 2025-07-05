@@ -20,4 +20,11 @@ defmodule DomStructsTest do
 
     assert expected == actual
   end
+
+  test "new node collection from query" do
+    expected = %DOM.NodeCollection{selector_type: :query, selector_value: ".my-class"}
+    actual = DOM.NodeCollection.new!(%{selector_type: :query, selector_value: ".my-class"})
+
+    assert expected == actual
+  end
 end

@@ -9,11 +9,12 @@ defmodule Tamnoon.DOM.NodeCollection do
   ## Fields
 
     * `:selector_type` – an atom indicating the type of selector.
-      - Expected values: `:xpath_collection`, `:children`.
+      - Expected values: `:xpath`, `:query`, `:children`.
 
     * `:selector_value` – the value associated with the selector.
+      - `:xpath`: a `t:String.t/0` of the xpath to select by.
+      - `:query`: a `t:String.t/0` of the query selector to select by.
       - `:children`: a `t:Tamnoon.DOM.Node.t/0` of the parent node.
-      - `:xpath_collection`: a `t:String.t/0` of the xpath to select.
   """
 
   alias Tamnoon.DOM
@@ -24,7 +25,7 @@ defmodule Tamnoon.DOM.NodeCollection do
   defstruct [:selector_type, :selector_value]
 
   @type t :: %__MODULE__{
-          selector_type: :xpath_collection | :children,
+          selector_type: :xpath | :query | :children,
           selector_value: String.t() | Tamnoon.DOM.Node.t()
         }
 
@@ -35,7 +36,10 @@ defmodule Tamnoon.DOM.NodeCollection do
 
   def is_node_collection?(%{selector_type: :children, selector_value: %DOM.Node{}}), do: true
 
-  def is_node_collection?(%{selector_type: :xpath_collection, selector_value: value})
+  def is_node_collection?(%{selector_type: :xpath, selector_value: value})
+    when is_binary(value), do: true
+
+  def is_node_collection?(%{selector_type: :query, selector_value: value})
     when is_binary(value), do: true
 
   def is_node_collection?(_), do: false
