@@ -44,7 +44,7 @@ defmodule Tamnoon.DOM.NodeCollection do
 
   def is_node_collection?(_), do: false
 
-
+  @spec new!(node_collection :: term()) :: %DOM.NodeCollection{}
   def new!(%DOM.NodeCollection{} = node_collection), do: node_collection
 
   def new!(node_collection) do

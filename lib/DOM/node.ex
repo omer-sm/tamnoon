@@ -48,7 +48,7 @@ defmodule Tamnoon.DOM.Node do
 
   def is_node?(_), do: false
 
-
+  @spec new!(node :: term()) :: %DOM.Node{}
   def new!(%DOM.Node{} = node), do: node
 
   def new!(node) do
