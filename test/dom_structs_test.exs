@@ -27,4 +27,12 @@ defmodule DomStructsTest do
 
     assert expected == actual
   end
+
+  test "new add child" do
+    node = DOM.Node.new!(%{selector_type: :id, selector_value: "my-id"})
+    expected = %DOM.Actions.AddChild{parent: node, child: node}
+    actual = DOM.Actions.AddChild.new!(%{parent: node, child: node})
+
+    assert expected == actual
+  end
 end

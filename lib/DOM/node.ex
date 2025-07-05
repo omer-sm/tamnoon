@@ -30,7 +30,7 @@ defmodule Tamnoon.DOM.Node do
 
   @type t :: %__MODULE__{
           selector_type: :id | :xpath | :from_string | :first_child | :last_child,
-          selector_value: String.t() | Tamnoon.DOM.NodeCollection.t()
+          selector_value: String.t() | DOM.NodeCollection.t()
         }
 
   @spec is_node?(node :: any()) :: boolean()

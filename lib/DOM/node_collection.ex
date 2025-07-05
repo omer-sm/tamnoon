@@ -26,7 +26,7 @@ defmodule Tamnoon.DOM.NodeCollection do
 
   @type t :: %__MODULE__{
           selector_type: :xpath | :query | :children,
-          selector_value: String.t() | Tamnoon.DOM.Node.t()
+          selector_value: String.t() | DOM.Node.t()
         }
 
   @spec is_node_collection?(node_collection :: any()) :: boolean()
