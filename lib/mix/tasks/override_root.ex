@@ -30,18 +30,14 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
 
           use Plug.Router
 
+          plug(Plug.Static,
+            at: "/",
+            from: :tamnoon,
+            gzip: false
+          )
+
           plug :match
           plug :dispatch
-
-          get "/" do
-            Tamnoon.LiveReload.try_recompile()
-            Tamnoon.Compiler.build_from_root(#{app_name}.Components.Root)
-            send_file(conn, 200, "tamnoon_out/app.html")
-          end
-
-          get "/tamnoon_driver.js" do
-            send_file(conn, 200, Application.app_dir(:tamnoon, "priv/static/tamnoon_driver.js"))
-          end
 
           match _ do
             send_resp(conn, 404, "404")

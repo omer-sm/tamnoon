@@ -13,6 +13,7 @@ defmodule Tamnoon.Components.Root do
         <meta charset="utf-8">
         <title>Tamnoon App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="tamnoon_dom.js"></script>
         <script src="tamnoon_driver.js"></script>
       </head>
 
