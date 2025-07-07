@@ -65,11 +65,12 @@ defmodule Tamnoon.MethodManager do
     if found_func_info == nil do
       Logger.error("Method '#{method}' not found in any methods module.")
 
-      {:reply, {:text, elem(Jason.encode(%{error: "Method '#{method}' not found."}, []), 1)}, state}
+      {:reply, {:text, elem(Jason.encode(%{error: "Method '#{method}' not found."}, []), 1)},
+       state}
     else
       {methods_module, {func, _arity}} = found_func_info
 
-      {{ret_val, new_state}, []} =
+      {method_results, []} =
         quote do
           unquote(methods_module).unquote(func)(
             unquote(Macro.escape(payload)),
@@ -78,7 +79,21 @@ defmodule Tamnoon.MethodManager do
         end
         |> Code.eval_quoted()
 
-      {:reply, {:text, elem(Jason.encode(ret_val, []), 1)}, new_state}
+      case method_results do
+        {diffs, new_state} ->
+          {:reply, {:text, elem(Jason.encode(%{diffs: diffs}, []), 1)}, new_state}
+
+        {diffs, new_state, actions} ->
+          {:reply, {:text, elem(Jason.encode(%{diffs: diffs, actions: actions}, []), 1)},
+           new_state}
+
+        _ ->
+          Logger.warning(
+            "Method '#{method}' returned an invalid value '#{inspect(method_results)}'. Methods must return a {diffs, new_state} tuple or a {diffs, new_state, actions} tuple."
+          )
+
+          {:reply, {:text, elem(Jason.encode(%{diffs: %{}}, []), 1)}, state}
+      end
     end
   end
 

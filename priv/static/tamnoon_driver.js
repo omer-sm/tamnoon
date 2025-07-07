@@ -59,6 +59,78 @@ const addInputListeners = (rootElement = document) => {
     });
 };
 
+const applyDiffs = (diffs) => {
+  for (const [k, v] of Object.entries(diffs)) {
+    if (k !== 'error') {
+      if (!(k in ['pub', 'sub', 'unsub', 'subbed_channels', 'set_state'])) {
+        currState[k] = v;
+      }
+
+      // Update the elements with the class that matches the key
+      document
+        .querySelectorAll(
+          `[class^="tmnn-${k}-"], [class*=" tmnn-${k}-"], [class^="tmnn-not-${k}-"], [class*=" tmnn-not-${k}-"]`
+        )
+        .forEach((elem) => {
+          const classes = elem.className
+            .split(/\s+/)
+            .filter((c) => c && new RegExp(`^tmnn-(?:not-)?${k}-`).test(c));
+
+          classes.forEach((className) => {
+            const attr = className.slice(className.lastIndexOf('-') + 1);
+            const newValue = className.startsWith('tmnn-not-') ? !v : v;
+
+            switch (attr) {
+              case 'innerHtml':
+                elem.innerHTML = newValue;
+                addInputListeners(elem);
+
+                break;
+
+              case 'innerText':
+                elem.innerText = newValue;
+
+                break;
+
+              case 'value':
+                elem.value = newValue;
+
+                break;
+
+              case 'class':
+                const tmnnClasses = [...elem.classList].filter(
+                  (c) => c.startsWith('tmnn-') || c.startsWith('tmnnevent-')
+                );
+
+                elem.className = tmnnClasses.join(' ') + ' ' + newValue;
+
+                break;
+
+              case 'hidden':
+                elem.hidden = newValue;
+
+                break;
+
+              case 'disabled':
+                if (newValue) {
+                  elem.setAttribute('disabled', newValue);
+                } else {
+                  elem.removeAttribute('disabled');
+                }
+
+                break;
+
+              default:
+                elem.setAttribute(attr, newValue);
+
+                break;
+            }
+          });
+        });
+    }
+  }
+};
+
 const connectWebSocket = (isReconnect = false) => {
   socket = new WebSocket(wsUrl);
 
@@ -94,80 +166,14 @@ const connectWebSocket = (isReconnect = false) => {
 
   socket.onmessage = function (event) {
     // Parse the server's message to update the necessary elements.
-    const diffs = JSON.parse(event.data);
+    const { diffs, actions } = JSON.parse(event.data);
 
     if (!diffs) return;
 
-    for (const [k, v] of Object.entries(diffs)) {
-      if (k !== 'error') {
-        if (!(k in ['pub', 'sub', 'unsub', 'subbed_channels', 'set_state'])) {
-          currState[k] = v;
-        }
+    applyDiffs(diffs);
 
-        // Update the elements with the class that matches the key.
-        document
-          .querySelectorAll(
-            `[class^="tmnn-${k}-"], [class*=" tmnn-${k}-"], [class^="tmnn-not-${k}-"], [class*=" tmnn-not-${k}-"]`
-          )
-          .forEach((elem) => {
-            const classes = elem.className
-              .split(/\s+/)
-              .filter((c) => c && new RegExp(`^tmnn-(?:not-)?${k}-`).test(c));
-
-            classes.forEach((className) => {
-              const attr = className.slice(className.lastIndexOf('-') + 1);
-              const newValue = className.startsWith('tmnn-not-') ? !v : v;
-
-              switch (attr) {
-                case 'innerHtml':
-                  elem.innerHTML = newValue;
-                  addInputListeners(elem);
-
-                  break;
-
-                case 'innerText':
-                  elem.innerText = newValue;
-
-                  break;
-
-                case 'value':
-                  elem.value = newValue;
-
-                  break;
-
-                case 'class':
-                  const tmnnClasses = 
-                    [...elem.classList]
-                    .filter(
-                      (c) => c.startsWith('tmnn-') || c.startsWith('tmnnevent-')
-                    );
-
-                  elem.className = tmnnClasses.join(' ') + ' ' + newValue;
-
-                  break;
-
-                case 'hidden':
-                  elem.hidden = newValue;
-
-                  break;
-
-                case 'disabled':
-                  if (newValue) {
-                    elem.setAttribute('disabled', newValue);
-                  } else {
-                    elem.removeAttribute('disabled');
-                  }
-
-                  break;
-
-                default:
-                  elem.setAttribute(attr, newValue);
-
-                  break;
-              }
-            });
-          });
-      }
+    if (Array.isArray(actions)) {
+      actions.forEach(parseAction);
     }
   };
 
