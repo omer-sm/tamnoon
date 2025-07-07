@@ -62,10 +62,15 @@ const parseCollectionSelector = (selector) => {
 
 const actionParsers = {
   RemoveNode: ({ target }) => parseSingleSelector(target).remove(),
-  replaceNode: ({ target, replacement }) =>
+  ReplaceNode: ({ target, replacement }) =>
     parseSingleSelector(target).replaceWith(parseSingleSelector(replacement)),
-  addChild: ({ parent, child }) =>
+  AddChild: ({ parent, child }) =>
     parseSingleSelector(parent).append(parseSingleSelector(child)),
+  SetAttribute: ({ target, attribute, value }) =>
+    parseSingleSelector(target).setAttribute(attribute, value),
+  ToggleAttribute: ({ target, attribute, force }) =>
+    parseSingleSelector(target).toggleAttribute(attribute, force),
+  SetValue: ({ target, value }) => (parseSingleSelector(target).value = value),
 };
 
 const parseAction = (action) => {

@@ -35,4 +35,20 @@ defmodule DomStructsTest do
 
     assert expected == actual
   end
+
+  test "toggle attribute without force is valid" do
+    node = DOM.Node.new!(%{selector_type: :id, selector_value: "my-id"})
+    expected = %DOM.Actions.ToggleAttribute{target: node, attribute: "hidden"}
+    actual = DOM.Actions.ToggleAttribute.new!(%{target: node, attribute: "hidden"})
+
+    assert expected == actual
+  end
+
+  test "toggle attribute with force is valid" do
+    node = DOM.Node.new!(%{selector_type: :id, selector_value: "my-id"})
+    expected = %DOM.Actions.ToggleAttribute{target: node, attribute: "hidden", force: true}
+    actual = DOM.Actions.ToggleAttribute.new!(%{target: node, attribute: "hidden", force: true})
+
+    assert expected == actual
+  end
 end
