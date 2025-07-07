@@ -4,7 +4,7 @@ const singleSelectorParsers = {
     const template = document.createElement('template');
     template.innerHTML = elementString.trim();
 
-    return template.content.firstChild();
+    return template.content.firstChild;
   },
   xpath: (xpathString) =>
     document.evaluate(
