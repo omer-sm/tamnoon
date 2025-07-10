@@ -1,7 +1,7 @@
 defmodule Tamnoon.DOM.Actions.ToggleAttribute do
   alias Tamnoon.DOM
   import DOM
-  use DOM.Actions.ActionEncoder
+  use DOM.JsonEncoder, type: :action
 
   @enforce_keys [:target, :attribute]
   defstruct [:target, :attribute, :force]

@@ -20,8 +20,8 @@ defmodule Tamnoon.DOM.Node do
 
   alias Tamnoon.DOM
   import DOM
+  use DOM.JsonEncoder, type: :node
 
-  @derive Jason.Encoder
   @enforce_keys [:selector_type, :selector_value]
   defstruct [:selector_type, :selector_value]
 

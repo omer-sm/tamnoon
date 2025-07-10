@@ -1,7 +1,7 @@
 defmodule Tamnoon.DOM.Actions.SetValue do
   alias Tamnoon.DOM
   import DOM
-  use DOM.Actions.ActionEncoder
+  use DOM.JsonEncoder, type: :action
 
   @enforce_keys [:target, :value]
   defstruct [:target, :value]
