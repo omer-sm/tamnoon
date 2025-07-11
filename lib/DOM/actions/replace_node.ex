@@ -1,4 +1,7 @@
 defmodule Tamnoon.DOM.Actions.ReplaceNode do
+  @moduledoc """
+  An action that will replace the `:target` node with the `:replacement` node.
+  """
   alias Tamnoon.DOM
   import DOM
   use DOM.JsonEncoder, type: :action
@@ -11,6 +14,10 @@ defmodule Tamnoon.DOM.Actions.ReplaceNode do
           replacement: DOM.Node.t()
         }
 
+  @doc """
+  Returns whether the argument is a `t:Tamnoon.DOM.Actions.ReplaceNode.t/0`, or a map with
+  the necessary properties to construct one (via `new!/1`).
+  """
   @spec is_valid?(action_args :: any()) :: boolean()
   def is_valid?(action_args)
 
@@ -20,7 +27,13 @@ defmodule Tamnoon.DOM.Actions.ReplaceNode do
 
   def is_valid?(_), do: false
 
+  @doc """
+  Constructs a `t:Tamnoon.DOM.Actions.ReplaceNode.t/0` with the following arguments:
 
+  * `:target`: a `t:Tamnoon.DOM.Node.t/0`.
+
+  * `:replacement`: a `t:Tamnoon.DOM.Node.t/0`.
+  """
   @spec new!(action_args :: term()) :: %DOM.Actions.ReplaceNode{}
   def new!(%DOM.Actions.ReplaceNode{} = action_args), do: action_args
 

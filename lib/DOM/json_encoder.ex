@@ -1,4 +1,5 @@
 defmodule Tamnoon.DOM.JsonEncoder do
+  @moduledoc false
   @type dom_struct_type() :: :action | :node | :node_collection
 
   @spec encode_dom_struct(value :: struct(), opts :: term(), type :: dom_struct_type()) ::

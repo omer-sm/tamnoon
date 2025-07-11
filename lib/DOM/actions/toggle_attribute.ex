@@ -1,4 +1,8 @@
 defmodule Tamnoon.DOM.Actions.ToggleAttribute do
+  @moduledoc """
+  An action that will toggle `:attribute` attribute of the `:target` node. An additional
+  argument `:force` can also be provided in order to force the value as `true` or `false`.
+  """
   alias Tamnoon.DOM
   import DOM
   use DOM.JsonEncoder, type: :action
@@ -12,6 +16,10 @@ defmodule Tamnoon.DOM.Actions.ToggleAttribute do
           force: boolean() | nil
         }
 
+        @doc """
+  Returns whether the argument is a `t:Tamnoon.DOM.Actions.ToggleAttribute.t/0`, or a map with
+  the necessary properties to construct one (via `new!/1`).
+  """
   @spec is_valid?(action_args :: any()) :: boolean()
   def is_valid?(action_args)
 
@@ -27,6 +35,15 @@ defmodule Tamnoon.DOM.Actions.ToggleAttribute do
 
   def is_valid?(_), do: false
 
+  @doc """
+  Constructs a `t:Tamnoon.DOM.Actions.SetValue.t/0` with the following arguments:
+
+  * `:target`: a `t:Tamnoon.DOM.Node.t/0`.
+
+  * `:attribute`: a `t:String.t/0`.
+
+  * `:force`: a boolean (optional).
+  """
   @spec new!(action_args :: term()) :: %DOM.Actions.ToggleAttribute{}
   def new!(%DOM.Actions.ToggleAttribute{} = action_args), do: action_args
 

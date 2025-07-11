@@ -17,6 +17,10 @@ defmodule Tamnoon.MixProject do
         main: "readme",
         logo: "assets/logo.png",
         assets: "assets",
+        groups_for_modules: [
+          "DOM": ~r/^Tamnoon\.DOM(?!\.Actions(\.|$))/,
+          "DOM Actions": ~r/^Tamnoon\.DOM\.Actions.*/
+        ],
         extras: ["README.md", "changelog.md", "guides (new)/overview.md",
         "guides (new)/getting started.md", "guides (new)/components.md",
         "guides (new)/the state and methods.md", "guides (new)/tamnoon heex.md",

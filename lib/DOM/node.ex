@@ -5,17 +5,21 @@ defmodule Tamnoon.DOM.Node do
   `:selector_value` is `"id-to-select"`, it will be equivalent to using
   `document.getElementById("id-to-select")` in JS.
 
+  `:selector_type` can be set as `:iteration_placeholder`, which is a special value intended for use
+  with `m:Tamnoon.DOM.Actions.ForEach`, and will represent the argument that will be each node
+  of the collection.
 
   ## Fields
 
     * `:selector_type` – an atom indicating the type of selector.
-      - Expected values: `:id`, `:xpath`, `:from_string`, `:first_element`, `:last_element`.
+      - Expected values: `:id`, `:xpath`, `:from_string`, `:first_element`, `:last_element`, `:iteration_placeholder`.
 
     * `:selector_value` – the value associated with the selector.
       - `:id`: a `t:String.t/0` of the id to select.
       - `:xpath`: a `t:String.t/0` of the node's xpath.
       - `:from_string`: a `t:String.t/0` representing the HTML element.
       - `:first_element` and `:last_element`: a `t:Tamnoon.DOM.NodeCollection.t/0` representing the collection to query.
+      - `:iteration_placeholder`: `nil`.
   """
 
   alias Tamnoon.DOM
