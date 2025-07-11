@@ -6,6 +6,8 @@
 
 #### Minor changes:
 
+- `Tamnoon.MethodManager.diff/3` Now accepts a third (optional) `actions` argument.
+
 - Changed debug mode to be able to log only the `req` or `state`, and changed the debug messages formatting.
 
 - Changed the default router to use plug's `Plug.Static`.

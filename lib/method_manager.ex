@@ -99,6 +99,7 @@ defmodule Tamnoon.MethodManager do
 
   @doc """
   Returns a tuple containing the diffs and the new state after applying the diffs.
+  Additionally, Actions can be passed to the third argument in order to include them as well.
   Can be used in method handlers to update a value easily.
   ## Example
   ```
@@ -109,9 +110,15 @@ defmodule Tamnoon.MethodManager do
   end
   ```
   """
-  @spec diff(map(), map()) :: {map(), map()}
-  def diff(diffs, state) do
+  @spec diff(map(), map(), list() | nil) :: {map(), map()} | {map(), map(), list()}
+  def diff(diffs, state, actions \\ nil)
+
+  def diff(diffs, state, nil) do
     {diffs, Map.merge(state, diffs, fn _key, _old, new -> new end)}
+  end
+
+  def diff(diffs, state, actions) do
+    {diffs, Map.merge(state, diffs, fn _key, _old, new -> new end), actions}
   end
 
   @doc """
