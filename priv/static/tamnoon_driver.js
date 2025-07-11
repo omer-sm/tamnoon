@@ -1,6 +1,7 @@
 const url = new URL(document.location.href);
 url.protocol = url.protocol === 'http:' ? 'ws:' : 'wss:';
 url.pathname += 'ws';
+url.hash = '';
 const wsUrl = url.toString();
 const currState = {};
 let socket;
