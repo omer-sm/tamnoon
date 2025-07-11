@@ -2,9 +2,13 @@
 
 ### v1.0.0-a.6 
 
+- Added _DOM Actions_: Methods can now return a third argument of _actions_, which are used to manipulate the DOM in ways that are impossible or convoluted to achieve with the state. 
+
 #### Minor changes:
 
 - Changed debug mode to be able to log only the `req` or `state`, and changed the debug messages formatting.
+
+- Changed the default router to use plug's `Plug.Static`.
 
 - Renamed the driver script to _tamnoon\_driver.js_ (was _ws\_connect.js_).
 
@@ -18,7 +22,9 @@
 
 - Changed the `root` component that gets generated with `m:Mix.Tasks.Tamnoon.OverrideRoot` to not try rendering an `app.html.heex` component by default.
 
-- Fixed a bug causing `<a>` elements to not send their value.
+- Fixed a bug causing `<a>` elements to not send their value when triggering a method.
+
+- Fixed a bug where having a hash (#) in the URL would cause the socket connection to error out.
 
 
 ### v1.0.0-a.5 (13.06.25)

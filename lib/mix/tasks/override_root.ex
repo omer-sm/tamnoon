@@ -31,7 +31,7 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
           use Plug.Router
 
           plug(Plug.Static,
-            at: "/",
+            at: "/tamnoon",
             from: :tamnoon,
             gzip: false
           )
@@ -72,8 +72,8 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
                 <meta charset="utf-8">
                 <title>Tamnoon App</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1">
-                <script src="tamnoon_dom.js"></script>
-                <script src="tamnoon_driver.js"></script>
+                <script src="tamnoon/tamnoon_dom.js"></script>
+                <script src="tamnoon/tamnoon_driver.js"></script>
               </head>
 
               <body>

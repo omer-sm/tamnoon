@@ -6,7 +6,7 @@ defmodule Tamnoon.Router do
   use Plug.Router
 
   plug(Plug.Static,
-    at: "/",
+    at: "/tamnoon",
     from: :tamnoon,
     gzip: false
   )
