@@ -111,8 +111,17 @@ const actionParsers = {
   AddChild: ({ parent, child }) =>
     parseSingleSelector(parent).append(parseSingleSelector(child)),
 
-  SetAttribute: ({ target, attribute, value }) =>
-    parseSingleSelector(target).setAttribute(attribute, value),
+  SetAttribute: ({ target, attribute, value }) => {
+    if (attribute === 'textContent') {
+      parseSingleSelector(target).textContent = value;
+    } else {
+      parseSingleSelector(target).setAttribute(attribute, value);
+    }
+  },
+
+  SetInnerHTML: ({target, value}) => {
+    parseSingleSelector(target).innerHTML = value;
+  },
 
   ToggleAttribute: ({ target, attribute, force }) =>
     parseSingleSelector(target).toggleAttribute(attribute, force),
