@@ -1,11 +1,13 @@
 const singleSelectorParsers = {
   id: document.getElementById.bind(document),
+
   from_string: (elementString) => {
     const template = document.createElement('template');
     template.innerHTML = elementString.trim();
 
     return template.content.firstChild;
   },
+
   xpath: (xpathString) =>
     document.evaluate(
       xpathString,
@@ -14,15 +16,19 @@ const singleSelectorParsers = {
       XPathResult.FIRST_ORDERED_NODE_TYPE,
       null
     ).singleNodeValue,
-  first_element: (collectionSelector) => parseCollectionSelector(collectionSelector)[0],
-  last_element: (collectionSelector) => {
-    const collection = parseCollectionSelector(collectionSelector);
 
-    return collection[collection.length - 1];
-  },
+  first_element: (collectionSelector) =>
+    parseCollectionSelector(collectionSelector).first(),
+
+  last_element: (collectionSelector) =>
+    parseCollectionSelector(collectionSelector).last(),
 };
 
 const parseSingleSelector = (selector) => {
+  if (selector instanceof Node) {
+    return selector;
+  }
+
   const { selector_type: selectorType, selector_value: selectorValue } = selector;
 
   if (!selectorType || !selectorValue) {
@@ -42,15 +48,51 @@ const collectionSelectorParsers = {
       null
     );
 
-    return Array.from({ length: result.snapshotLength }, (_, i) =>
-      result.snapshotItem(i)
-    );
+    return {
+      first: () => result.iterateNext(),
+      last: () => result.snapshotItem(result.snapshotLength - 1),
+      forEach: (callback, argToIterate) => {
+        callback.args[argToIterate] = result.iterateNext();
+
+        while (callback[argToIterate]) {
+          parseAction(callback);
+          callback.args[argToIterate] = result.iterateNext();
+        }
+      },
+    };
   },
-  query: (query) => [...document.querySelectorAll(query)],
-  children: (parent) => parseSingleSelector(parent).children,
+
+  query: (query) => ({
+    first: () => document.querySelector(query),
+    last: () => {
+      const elements = document.querySelectorAll(query);
+      return elements.item(elements.length - 1);
+    },
+    forEach: (callback, argToIterate) => {
+      document.querySelectorAll(query).forEach((element) => {
+        callback.args[argToIterate] = element;
+        parseAction(callback);
+      });
+    },
+  }),
+
+  children: (parent) => ({
+    first: () => parseSingleSelector(parent).firstChild,
+    last: () => parseSingleSelector(parent).lastChild,
+    forEach: (callback, argToIterate) => {
+      for (const element of parseSingleSelector(parent).children) {
+        callback.args[argToIterate] = element;
+        parseAction(callback);
+      }
+    },
+  }),
 };
 
 const parseCollectionSelector = (selector) => {
+  if (Array.isArray(selector) && selector.every((node) => node instanceof Node)) {
+    return selector;
+  }
+
   const { selector_type: selectorType, selector_value: selectorValue } = selector;
 
   if (!selectorType || !selectorValue) {
@@ -62,15 +104,28 @@ const parseCollectionSelector = (selector) => {
 
 const actionParsers = {
   RemoveNode: ({ target }) => parseSingleSelector(target).remove(),
+
   ReplaceNode: ({ target, replacement }) =>
     parseSingleSelector(target).replaceWith(parseSingleSelector(replacement)),
+
   AddChild: ({ parent, child }) =>
     parseSingleSelector(parent).append(parseSingleSelector(child)),
+
   SetAttribute: ({ target, attribute, value }) =>
     parseSingleSelector(target).setAttribute(attribute, value),
+
   ToggleAttribute: ({ target, attribute, force }) =>
     parseSingleSelector(target).toggleAttribute(attribute, force),
+
   SetValue: ({ target, value }) => (parseSingleSelector(target).value = value),
+
+  ForEach: ({ target, callback }) => {
+    const [argToIterate] = Object.entries(callback.args).find(
+      ([key, value]) => value?.selector_type === 'iteration_placeholder'
+    );
+
+    parseCollectionSelector(target).forEach(callback, argToIterate);
+  },
 };
 
 const parseAction = (action) => {

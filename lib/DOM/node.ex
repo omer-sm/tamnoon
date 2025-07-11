@@ -25,18 +25,23 @@ defmodule Tamnoon.DOM.Node do
   @enforce_keys [:selector_type, :selector_value]
   defstruct [:selector_type, :selector_value]
 
+  @placeholder_selector_types [:iteration_placeholder]
   @single_selector_types [:id, :xpath, :from_string]
   @collection_selector_types [:first_element, :last_element]
 
   @type t :: %__MODULE__{
-          selector_type: :id | :xpath | :from_string | :first_element | :last_element,
-          selector_value: String.t() | DOM.NodeCollection.t()
+          selector_type: :id | :xpath | :from_string | :first_element | :last_element | :iteration_placeholder,
+          selector_value: String.t() | DOM.NodeCollection.t() | nil
         }
 
   @spec is_node?(node :: any()) :: boolean()
   def is_node?(node)
 
   def is_node?(%DOM.Node{}), do: true
+
+  def is_node?(%{selector_type: type, selector_value: value})
+      when type in @placeholder_selector_types and is_nil(value),
+      do: true
 
   def is_node?(%{selector_type: type, selector_value: value})
       when type in @single_selector_types and is_binary(value),
