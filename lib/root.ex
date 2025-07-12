@@ -15,6 +15,7 @@ defmodule Tamnoon.Components.Root do
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="tamnoon/tamnoon_dom.js"></script>
         <script src="tamnoon/tamnoon_driver.js"></script>
+        <link rel="icon" type="image/x-icon" href="/tamnoon/tamnoon_icon.ico">
       </head>
 
       <body>
