@@ -2,9 +2,16 @@
 
 #### A simplicity-first web framework for Elixir.
 
-Tamnoon is a web framework aiming to provide a simple, minimal and approachable solution to web development with Elixir. It takes a component-based and functional approach, which makes Tamnoon apps easily debuggable.
+Tamnoon is a web framework designed to offer a simple, minimal, and approachable way to build web applications with Elixir. It emphasizes rapid development by eliminating boilerplate, allowing you to focus on building features rather than configuring setup. Inspired by modern frontend tools such as React and Redux, Tamnoon embraces a component-based, functional architecture tailored for Elixir developers.
 
-In addition to easy client-server communication, it comes with built-in PubSub functionality too - allowing you to sync up multiple users effortlessly.
+### 🔹 Highlight Features
+
+* Zero configuration required – Get started instantly with no setup or boilerplate.
+
+* Built-in PubSub – Simple, native publish-subscribe messaging without extra dependencies.
+
+* Pure Elixir – Build full-featured interactive web apps without writing any JavaScript.
+
 
 To get started, check out the _Overview_ guide.
 
