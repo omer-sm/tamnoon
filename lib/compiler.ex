@@ -4,7 +4,7 @@ defmodule Tamnoon.Compiler do
   """
 
   @doc """
-  Compiles the 'root.ex' component into the final file that is sent to the client.
+  Compiles the provided component into the final file that is sent to the client.
   """
   @spec build_from_root(root :: String.t() | module()) :: :ok | {:error, atom()}
   def build_from_root(root \\ Tamnoon.Components.Root) do
@@ -20,9 +20,11 @@ defmodule Tamnoon.Compiler do
   - either a component module or a file name of a heex component file inside _lib/components_,
   - the _assigns_ for the EEx blocks in the component,
   - and a boolean for whether to parse the Tamnoon heex.
+
   When the function is used inside a component that gets built into the root in the `build_from_root/2`
   function, the last argument should be `false` to avoid invoking `parse_tmnn_heex/1` multiple
   times.
+
   Inside EEx blocks in heex components, this function can be invoked as `<%= r.([args..]) %>`.
   See `render_component_dyn/1`.
   """

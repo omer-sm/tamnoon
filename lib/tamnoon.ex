@@ -3,6 +3,7 @@ defmodule Tamnoon do
   This module provides functions needed to initialize Tamnoon. You do not need to handle
   it directly, rather, the only time you need to call something in this module is in your
   supervision tree, to add it to the children and configure it (see `child_spec/1`).
+
   ## Example
   ```
   def start_link(opts \\\\ []) do
@@ -15,15 +16,15 @@ defmodule Tamnoon do
   require Logger
 
   @typedoc """
-  Options for initializing Tamnoon. Defaults to `[8000, Tamnoon.Router, Tamnoon.SocketHandler, Tamnoon.Methods, %{}]`.
+  Options for initializing Tamnoon.
   - `port`: The port Tamnoon will run on. Defaults to _8000_.
   - `initial_state`: A map, or a function that returns one, representing the state new clients will start with. Defaults to an empty map.
-  - `methods_modules`: The modules where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
+  - `methods_modules`: A list of modules where your methods are defined (see `m:Tamnoon.Methods`). Defaults to `m:Tamnoon.Methods`.
   - `router`: The router module (see `m:Plug.Router`). Defaults to `m:Tamnoon.Router`.
   - `debug_mode`: Debug mode settings. If set to `:req` or `:state`, it will log requests or the state respectively. If set to `:all` or `:none`, it will log both or none. Defaults to `:none`.
   - `live_reload`: Whether to enable live reload. Defaults to `true`. If set to `true`, Tamnoon will automatically recompile when new connections are made (or when a client refreshes the page).
-  - `socket_handler`: The handler module for WebSocket requests. Usually doesn't need to be overriden. Defaults to `m:Tamnoon.SocketHandler`.
   - `protocol_opts`: Whether Tamnoon uses HTTP or HTTPS. See `t:tamnoon_protocol_opts/0` for more info.
+  - `socket_handler`: The handler module for WebSocket requests. Usually doesn't need to be overriden. Defaults to `m:Tamnoon.SocketHandler`.
   """
   @type tamnoon_opts() :: [
           initial_state: (-> map()) | map(),
@@ -125,7 +126,7 @@ defmodule Tamnoon do
 
   @doc """
   Copies HEEx file components to the release directory and creates a _tamnoon\_out_ directory
-  in it. It is needed to be ran as a _step_ in the release (see `m:Mix.Release`).
+  in it. It is used as a _step_ in the release (see `m:Mix.Release`).
   """
   @spec make_release(Mix.Release) :: Mix.Release
   def make_release(release) do

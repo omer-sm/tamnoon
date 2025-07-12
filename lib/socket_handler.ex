@@ -1,11 +1,9 @@
 defmodule Tamnoon.SocketHandler do
   @moduledoc """
-  A default `:cowboy_websocket` implementation. Usually there should not be a reason to do anything
-  directly with this module, as it gets its options from `Tamnoon.start_link/1` and
-  adapts to them automatically. However, it is still documented for the sake of allowing
-  extensiblity.
-  You can replace the module with a custom one via setting it as the _(drumroll..)_ `:socket_handler`
-  key's value in `Tamnoon.start_link/1`'s options.
+  Tamnoon's `:cowboy_websocket` implementation. There should be no reason to interact with this
+  module, however, it is still documented to allow extensibility.
+  You can replace the module with another by setting the `:socket_handler` value in
+  `Tamnoon.start_link/1`'s options.
   """
   require Logger
   @behaviour :cowboy_websocket

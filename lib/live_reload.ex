@@ -1,4 +1,5 @@
 defmodule Tamnoon.LiveReload do
+  @moduledoc false
   require Logger
 
   def try_recompile() do

@@ -2,6 +2,7 @@ defmodule Tamnoon.MethodManager do
   @moduledoc """
   This module handles the management of different methods as you create them.
   Notably, it provides the `defmethod/2` macro.
+
   > #### Importing the module {: .info}
   > In order to create handlers for the methods you set up, you must `import Tamnoon.MethodManager`
   > in your _methods module_. Then, you can use the `defmethod/2` macro to implement handling
@@ -10,19 +11,37 @@ defmodule Tamnoon.MethodManager do
   require Logger
 
   @doc """
-  Defines a function named `tmnn_[name]`. Functions with this prefix in your _methods module_
-  will automatically be added to the possible methods when invoking `route_request/3`.
-  Inside the created function, you can access the state of the client and the request
-  object by the `state` and `req` variables respectively.
-  Method handlers must return a tuple of `{return_value, new_state}` (note: use `diff/2` for a shorter version).
+  Defines a _method_. Methods are functions that can be triggered via Tamnoon HEEx code
+  (see the _Methods_ guide for more info).
+
+  Methods receive the `state` map and a `req` map. The `state` is the current state of
+  the app, and `req` is a map containing info about the invocation - specifically:
+
+  - `:value`: The invoking element's value.
+  - `:key`: The _key_ given to the method (for example, an element with
+    `onclick=@update-name` will have `"name"` as the `:key`). Is included only when a key
+    is given.
+  - `:element`: The raw HTML of the invoking element.
+
+  Methods must return either a `{diffs, new_state}` tuple or a `{diffs, new_state, actions}` tuple.
+  (note: use `diff/2` for a shorter version)
+
+  - _diffs_: A map containing the changes in the state (will be updated in the client).
+  - _new\_state_: A map which will be set as the state.
+  - _actions_: a list of _actions_ (see `m:Tamnoon.DOM`).
+
+  Under the hood, it defines a function named `tmnn_[name]`. Functions with this prefix in your
+  _methods modules_ will automatically be added to the possible methods when invoking `route_request/3`.
+
   ## Example
   ```
   defmethod :get do
     key = get_key(req, state)
-    if (key != nil) do
-      {state[key], state}
+
+    if key != nil do
+      {%{key => state[key]}, state}
     else
-      {"Error: no matching key", state}
+      {%{error: "Error: no matching key"}, state}
     end
   end
   ```
@@ -43,7 +62,7 @@ defmodule Tamnoon.MethodManager do
   end
 
   @doc """
-  The function used by `Tamnoon.SocketHandler.websocket_handle/2` to route the requests
+  The function used internally by `Tamnoon.SocketHandler.websocket_handle/2` to route the requests
   to the appropriate method handler.
   """
   @spec route_request(list(module()), map(), map()) ::
@@ -101,6 +120,7 @@ defmodule Tamnoon.MethodManager do
   Returns a tuple containing the diffs and the new state after applying the diffs.
   Additionally, Actions can be passed to the third argument in order to include them as well.
   Can be used in method handlers to update a value easily.
+
   ## Example
   ```
   defmethod :change_something do

@@ -193,7 +193,7 @@ defmodule Tamnoon.Methods do
 
   @doc """
   Returns the value of the key under the field `"key"` in the request as an atom.
-  Note: this is *NOT* a method handler - simply a utility function.
+  Note: this is not a method handler - simply a utility function.
   """
   @spec get_key(map(), map()) :: atom() | nil
   def get_key(req, state) do
