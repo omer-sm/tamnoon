@@ -90,7 +90,15 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
       end
 
       Mix.shell().info(
-        "Done! Now add router: #{app_name}.Router to your Tamnoon options in `application.ex`."
+        "Done! Now add router: #{app_name}.Router to your Tamnoon options in `application.ex` as such:
+
+          def start(_type, _args) do
+            children = [
+              {Tamnoon, [[router: #{app_name}.Router]]}
+            ]
+            opts = [strategy: :one_for_one, name: TamnoonTest.Supervisor]
+            Supervisor.start_link(children, opts)
+          end"
       )
     end
   end
