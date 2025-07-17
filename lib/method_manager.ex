@@ -23,12 +23,11 @@ defmodule Tamnoon.MethodManager do
     is given.
   - `:element`: The raw HTML of the invoking element.
 
-  Methods must return either a `{diffs, new_state}` tuple or a `{diffs, new_state, actions}` tuple.
-  (note: use `diff/2` for a shorter version)
+  Methods must return either a tuple of the form `{diffs}`, `{diffs, actions}`, or `{diffs, actions, new_state}` where:
 
   - _diffs_: A map containing the changes in the state (will be updated in the client).
-  - _new\_state_: A map which will be set as the state.
   - _actions_: a list of _actions_ (see `m:Tamnoon.DOM`).
+  - _new\_state_: A map which will be set as the new state (if not provided, the current state will be automatically merged with `diffs`).
 
   Under the hood, it defines a function named `tmnn_[name]`. Functions with this prefix in your
   _methods modules_ will automatically be added to the possible methods when invoking `route_request/3`.
@@ -39,9 +38,9 @@ defmodule Tamnoon.MethodManager do
     key = get_key(req, state)
 
     if key != nil do
-      {%{key => state[key]}, state}
+      {%{key => state[key]}, [], state}
     else
-      {%{error: "Error: no matching key"}, state}
+      {%{error: "Error: no matching key"}, [], state}
     end
   end
   ```
@@ -99,46 +98,28 @@ defmodule Tamnoon.MethodManager do
         |> Code.eval_quoted()
 
       case method_results do
-        {diffs, new_state} ->
+        {diffs} ->
+          new_state = merge_state(diffs, state)
           {:reply, {:text, elem(Jason.encode(%{diffs: diffs}, []), 1)}, new_state}
 
-        {diffs, new_state, actions} ->
+        {diffs, actions} ->
+          new_state = merge_state(diffs, state)
+
+          {:reply, {:text, elem(Jason.encode(%{diffs: diffs, actions: actions}, []), 1)},
+           new_state}
+
+        {diffs, actions, new_state} ->
           {:reply, {:text, elem(Jason.encode(%{diffs: diffs, actions: actions}, []), 1)},
            new_state}
 
         _ ->
           Logger.warning(
-            "Method '#{method}' returned an invalid value '#{inspect(method_results)}'. Methods must return a {diffs, new_state} tuple or a {diffs, new_state, actions} tuple."
+            "Method '#{method}' returned an invalid value '#{inspect(method_results)}'. Methods must return a tuple of the form {diffs}, {diffs, actions}, or {diffs, actions, new_state}."
           )
 
           {:reply, {:text, elem(Jason.encode(%{diffs: %{}}, []), 1)}, state}
       end
     end
-  end
-
-  @doc """
-  Returns a tuple containing the diffs and the new state after applying the diffs.
-  Additionally, Actions can be passed to the third argument in order to include them as well.
-  Can be used in method handlers to update a value easily.
-
-  ## Example
-  ```
-  defmethod :change_something do
-    diffs = %{some_key: "New value", another_key: "Another value"}
-
-    diff(diffs, state)
-  end
-  ```
-  """
-  @spec diff(map(), map(), list() | nil) :: {map(), map()} | {map(), map(), list()}
-  def diff(diffs, state, actions \\ nil)
-
-  def diff(diffs, state, nil) do
-    {diffs, Map.merge(state, diffs, fn _key, _old, new -> new end)}
-  end
-
-  def diff(diffs, state, actions) do
-    {diffs, Map.merge(state, diffs, fn _key, _old, new -> new end), actions}
   end
 
   @doc """
@@ -155,5 +136,9 @@ defmodule Tamnoon.MethodManager do
 
   def trigger_method(method, req, timeout) do
     Process.send_after(self(), Jason.encode!(Map.merge(req, %{method: method})), timeout)
+  end
+
+  defp merge_state(diffs, state) do
+    Map.merge(state, diffs, fn _key, _old, new -> new end)
   end
 end

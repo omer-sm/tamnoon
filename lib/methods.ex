@@ -45,7 +45,7 @@ defmodule Tamnoon.Methods do
   in the request. Returns an error string if there is no such item.
   """
   @spec tmnn_get(map(), map()) ::
-          {field :: map(), state :: map()} | {%{error: error :: String.t()}, state :: map()}
+          {field :: map(), [], state :: map()} | {%{error: error :: String.t()}, [], state :: map()}
   def tmnn_get(req, state), do: get(req, state)
 
   @doc """
@@ -54,7 +54,7 @@ defmodule Tamnoon.Methods do
   the state, or an error string if there is no such item.
   """
   @spec tmnn_update(map(), map()) ::
-          {new_field :: map(), state :: map()} | {%{error: error :: String.t()}, state :: map()}
+          {new_field :: map()} | {%{error: error :: String.t()}, [], state :: map()}
   def tmnn_update(req, state), do: update(req, state)
 
   @doc """
@@ -62,47 +62,47 @@ defmodule Tamnoon.Methods do
   channel, one will be created (with the client subscribed to it).
   If the client is already subscribed to the channel nothing will happen.
   """
-  @spec tmnn_sub(map(), map()) :: {%{sub: :ok}, state :: map()}
+  @spec tmnn_sub(map(), map()) :: {%{sub: :ok}, [], state :: map()}
   def tmnn_sub(req, state), do: sub(req, state)
 
   @doc """
   Will send the request under the `"action"` key in the request to every client
   in the channel under the `"channel"` key.
   """
-  @spec tmnn_pub(map(), map()) :: {%{pub: :ok}, state :: map()}
+  @spec tmnn_pub(map(), map()) :: {%{pub: :ok}, [], state :: map()}
   def tmnn_pub(req, state), do: pub(req, state)
 
   @doc """
   Unsubscribes from the channel under the `"key"` in the request.
   """
   @spec tmnn_unsub(map(), map()) ::
-          {%{unsub: :ok}, state :: map()} | {%{error: error :: String.t()}, state :: map()}
+          {%{unsub: :ok}, [], state :: map()} | {%{error: error :: String.t()}, [], state :: map()}
   def tmnn_unsub(req, state), do: unsub(req, state)
 
   @doc """
   Returns a list of the channels the client is currently subscribed to.
   """
   @spec tmnn_subbed_channels(map(), map()) ::
-          {%{subbed_channels: channels :: [String.t()]}, state :: map()}
+          {%{subbed_channels: channels :: [String.t()]}, [], state :: map()}
   def tmnn_subbed_channels(req, state), do: subbed_channels(req, state)
 
   @doc """
   Returns the current state. Automatically invoked when the connection is started.
   """
-  @spec tmnn_sync(map(), map()) :: {state :: map(), state :: map()}
+  @spec tmnn_sync(map(), map()) :: {state :: map(), [], state :: map()}
   def tmnn_sync(req, state), do: sync(req, state)
 
   @doc """
   Invoked every 55 seconds by the client in order to prevent idle timeouts.
   """
-  @spec tmnn_keep_alive(map(), map()) :: {nil, state :: map()}
+  @spec tmnn_keep_alive(map(), map()) :: {nil, [], state :: map()}
   def tmnn_keep_alive(req, state), do: keep_alive(req, state)
 
   @doc """
   Sets the state on the server to the state sent by the client. Invoked when the client reconnects
   to the server in order to prevent information loss.
   """
-  @spec tmnn_set_state(map(), map()) :: {%{set_state: :ok}, state :: map()}
+  @spec tmnn_set_state(map(), map()) :: {%{set_state: :ok}, [], state :: map()}
   def tmnn_set_state(req, state), do: set_state(req, state)
 
   @doc false
@@ -110,9 +110,9 @@ defmodule Tamnoon.Methods do
     key = get_key(req, state)
 
     if key != nil do
-      {%{key => state[key]}, state}
+      {%{key => state[key]}, [], state}
     else
-      {%{error: "Error: no matching key"}, state}
+      {%{error: "Error: no matching key"}, [], state}
     end
   end
 
@@ -121,9 +121,9 @@ defmodule Tamnoon.Methods do
     key = get_key(req, state)
 
     if key != nil do
-      {%{key => req["value"]}, Map.put(state, key, req["value"])}
+      {%{key => req["value"]}}
     else
-      {%{error: "Error: no matching key"}, state}
+      {%{error: "Error: no matching key"}, [], state}
     end
   end
 
@@ -134,23 +134,23 @@ defmodule Tamnoon.Methods do
       |> Registry.register(req["channel"], {})
     end
 
-    {%{sub: :ok}, state}
+    {%{sub: :ok}, [], state}
   end
 
   @doc false
   def unsub(req, state) do
     cond do
       req["channel"] == "clients" ->
-        {%{error: "Error: can't unsub from clients channel"}, state}
+        {%{error: "Error: can't unsub from clients channel"}, [], state}
 
       is_subbed?(req["channel"]) ->
         Tamnoon.Registry
         |> Registry.unregister(req["channel"])
 
-        {%{unsub: :ok}, state}
+        {%{unsub: :ok}, [], state}
 
       true ->
-        {%{unsub: :ok}, state}
+        {%{unsub: :ok}, [], state}
     end
   end
 
@@ -160,7 +160,7 @@ defmodule Tamnoon.Methods do
       Tamnoon.Registry
       |> Registry.keys(self())
 
-    {%{subbed_channels: channels}, state}
+    {%{subbed_channels: channels}, [], state}
   end
 
   @doc false
@@ -172,23 +172,23 @@ defmodule Tamnoon.Methods do
       end
     end)
 
-    {%{pub: :ok}, state}
+    {%{pub: :ok}, [], state}
   end
 
   @doc false
   def sync(_req, state) do
-    {state, state}
+    {state, [], state}
   end
 
   @doc false
   def keep_alive(_req, state) do
-    {nil, state}
+    {nil, [], state}
   end
 
   @doc false
   def set_state(req, _state) do
     new_state = for {key, val} <- req["state"], into: %{}, do: {String.to_atom(key), val}
-    {%{set_state: :ok}, new_state}
+    {%{set_state: :ok}, [], new_state}
   end
 
   @doc """
