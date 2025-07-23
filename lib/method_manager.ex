@@ -123,19 +123,19 @@ defmodule Tamnoon.MethodManager do
   end
 
   @doc """
-  Triggers a method with the given name and payload. An additional timeout can be specified
+  Triggers a method with the given name and payload. An additional timeout (in milliseconds) can be specified
   to delay the triggering of the method.
   """
   @spec trigger_method(atom(), map(), non_neg_integer()) ::
           :ok | :noconnect | :nosuspend | reference()
-  def trigger_method(method_name, payload, timeout \\ 0)
+  def trigger_method(method_name, payload, timeout_ms \\ 0)
 
   def trigger_method(method, req, 0) do
     Process.send(self(), Jason.encode!(Map.merge(req, %{method: method})), [])
   end
 
-  def trigger_method(method, req, timeout) do
-    Process.send_after(self(), Jason.encode!(Map.merge(req, %{method: method})), timeout)
+  def trigger_method(method, req, timeout_ms) do
+    Process.send_after(self(), Jason.encode!(Map.merge(req, %{method: method})), timeout_ms)
   end
 
   defp merge_state(diffs, state) do
