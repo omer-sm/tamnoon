@@ -43,6 +43,12 @@ defmodule Tamnoon.Methods do
   @doc """
   Returns the field with the key specified under the `"key"` field
   in the request. Returns an error string if there is no such item.
+
+  #### Example
+  ```
+  defmethod :
+  ```
+
   """
   @spec tmnn_get(map(), map()) ::
           {field :: map(), [], state :: map()} | {%{error: error :: String.t()}, [], state :: map()}

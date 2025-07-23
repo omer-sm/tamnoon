@@ -4,9 +4,13 @@
 
 - Added _DOM Actions_: Methods can now return a third argument of _actions_, which are used to manipulate the DOM in ways that are impossible or convoluted to achieve with the state. 
 
+- Revamped the documentation.
+
+- Methods will now return a tuple of the form `{diffs}`, `{diffs, actions}` or `{diffs, actions, new_state}`. For the first two, `diffs` will automatically be merged into the state.
+
 #### Minor changes:
 
-- `Tamnoon.MethodManager.diff/3` Now accepts a third (optional) `actions` argument.
+- Removed the MethodManager's `diff/2` function.
 
 - Changed debug mode to be able to log only the `req` or `state`, and changed the debug messages formatting.
 
@@ -27,6 +31,8 @@
 - Fixed a bug causing `<a>` elements to not send their value when triggering a method.
 
 - Fixed a bug where having a hash (#) in the URL would cause the socket connection to error out.
+
+- Renamed the `timeout` parameter of `Tamnoon.MethodManager.trigger_method/3` to `timeout_ms`.
 
 
 ### v1.0.0-a.5 (13.06.25)
