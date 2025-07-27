@@ -18,13 +18,20 @@ defmodule Tamnoon.MixProject do
         logo: "assets/logo.png",
         assets: "assets",
         groups_for_modules: [
-          "DOM": ~r/^Tamnoon\.DOM(?!\.Actions(\.|$))/,
+          DOM: ~r/^Tamnoon\.DOM(?!\.Actions(\.|$))/,
           "DOM Actions": ~r/^Tamnoon\.DOM\.Actions.*/
         ],
-        extras: ["README.md", "changelog.md", "guides (new)/overview.md",
-        "guides (new)/getting started.md", "guides (new)/components.md",
-        "guides (new)/the state and methods.md", "guides (new)/tamnoon heex.md",
-        "guides (new)/wrapping up.md", "guides (new)/deployment.md"]
+        extras: [
+          "README.md",
+          "changelog.md",
+          "guides (v1)/overview.md",
+          "guides (v1)/getting started.md",
+          "guides (v1)/components.md",
+          "guides (v1)/methods.md",
+          "guides (v1)/pubsub.md",
+          "guides (v1)/tamnoon heex.md",
+          "guides (v1)/dom actions.md"
+        ]
       ]
     ]
   end
@@ -54,6 +61,7 @@ defmodule Tamnoon.MixProject do
     ]
   end
 
-  defp description, do: "A simplicity-first web framework for Elixir, designed to make building web applications easy and enjoyable."
-
+  defp description,
+    do:
+      "A simplicity-first web framework for Elixir, designed to make building web applications easy and enjoyable."
 end

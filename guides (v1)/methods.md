@@ -2,7 +2,7 @@
 
 This guide will cover _methods_ - the main way to add interactions to your app. Methods are functions that are used to change your app's _state_.
 
-## The state
+## The State
 
 A Tamnoon app maintains a _state_ for each client - a map of key-value pairs that can be read and updated in response to user interactions. This state is initialized as part of your Tamnoon options:
 
@@ -30,7 +30,7 @@ To interact with the application state, you'll need to use _Tamnoon HEEx_, which
 
 Methods are Elixir functions triggered by user interactions in the UI. They allow you to perform logic and update the application state. Methods are defined using the `Tamnoon.MethodManager.defmethod/2` macro inside designated methods modules.
 
-#### Defining a methods module
+#### Defining a Methods Module
 
 To define a methods module, create a new Elixir module - typically placed under `lib/methods/` - and register it in your Tamnoon options:
 
@@ -48,7 +48,7 @@ def start(_type, _args) do
 end
 ```
 
-#### Defining a method
+#### Defining a Method
 
 Inside your methods module, import `m:Tamnoon.MethodManager` and use the `Tamnoon.MethodManager.defmethod/2` macro to define methods:
 
@@ -72,7 +72,7 @@ In this example:
 
 - It returns a tuple `{diffs}`, where `diffs` is a map of state changes.
 
-### Method parameters
+### Method Parameters
 
 The `Tamnoon.MethodManager.defmethod/2` macro provides your method with two arguments:
 
@@ -83,7 +83,7 @@ The `Tamnoon.MethodManager.defmethod/2` macro provides your method with two argu
    - `:key`: A custom key provided when invoking the method (optional, only included if one is provided).
    - `:element`: The raw HTML string of the invoking element.
 
-### Method return values
+### Method Return Values
 
 A method must return one of the following:
 
@@ -115,7 +115,7 @@ defmodule MyApp.Methods.CounterMethods do
 end
 ```
 
-### Calling methods from other methods
+### Calling Methods From Other Methods
 
 Tamnoon allows you to call one method from another, which is useful for composing logic and avoiding duplication.
 
@@ -153,7 +153,6 @@ Here:
 
 Its result is destructured and merged with additional changes before returning.
 
-
 2. **Using `trigger_method/3`**
 
 Tamnoon also provides the `Tamnoon.MethodManager.trigger_method/3` function, which allows you to invoke a method by name from within another method.
@@ -168,11 +167,9 @@ trigger_method(method_name :: atom, req :: map, timeout_ms :: integer)
 
 - `timeout_ms` - (Optional) Time in milliseconds before the method runs. Omit or use 0 for immediate execution.
 
-
 #### Key Difference
 
 Unlike manual invocation, `trigger_method/3` automatically sends the result of the called method to the client. This means you don't need to merge or return the result yourself - the response is handled for you.
-
 
 #### Example
 
@@ -196,9 +193,6 @@ In this example:
 
 This is especially useful for delayed interactions, animations, or chaining state updates over time.
 
+## Built-In Methods
 
-## Built-in methods
-
-Tamnoon provides a collection of built-in methods for you to use.
-
-### 
+Tamnoon includes a set of built-in methods available for use in your application. Their documentation is located in the `m:Tamnoon.Methods` module.

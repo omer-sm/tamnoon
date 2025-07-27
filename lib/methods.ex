@@ -1,88 +1,149 @@
 defmodule Tamnoon.Methods do
   @moduledoc """
-  Provides default implementations for methods you need to get your Tamnoon server
-  working - basic state management (with `tmnn_get/2` and `tmnn_update/2`) and basic handling of
-  PubSub channels (via `tmnn_sub/2`, `tmnn_unsub/2`, `tmnn_pub/2`, `tmnn_subbed_channels/2`)
-  > #### Using the module {: .info}
-  > Since v1.0.0-a.4, you should import `Tamnoon.MethodManager` in your _methods modules_ instead of using this module directly.
+  A _methods module_ that provides built-in methods for use in your Tamnoon application.
 
-  _Note: in the documentation of the default methods, the term 'returns' is used both
-  to describe the return value of the function and the value of the server's response._
+  This module offers utilities for basic state management via `tmnn_get/2` and `tmnn_update/2`,
+  as well as PubSub functionality through `tmnn_sub/2`, `tmnn_unsub/2`, `tmnn_pub/2`, and `tmnn_subbed_channels/2`.
+
+  Most of these methods are primarily intended either to be used internally by Tamnoon,
+  or to be triggered from Tamnoon HEEx markup.
+
+  This module is automatically included as a _methods module_ by Tamnoon.
+
+  _Note: In the documentation for the built-in methods, the term "returns" may refer to
+  either the function's return value or the value included in the server's response to the
+  client. The context should clarify which is meant._
   """
-
-  @deprecated "since v1.0.0-a.4, import `Tamnoon.MethodManager` instead of using this module."
-  defmacro __using__(_opts \\ []) do
-    quote do
-      import Tamnoon.MethodManager
-
-      import Tamnoon.Methods,
-        except: [
-          tmnn_get: 2,
-          tmnn_update: 2,
-          tmnn_sub: 2,
-          tmnn_pub: 2,
-          tmnn_unsub: 2,
-          tmnn_subbed_channels: 2,
-          tmnn_sync: 2,
-          tmnn_keep_alive: 2,
-          tmnn_set_state: 2
-        ]
-
-      def tmnn_get(req, state), do: get(req, state)
-      def tmnn_update(req, state), do: update(req, state)
-      def tmnn_sub(req, state), do: sub(req, state)
-      def tmnn_pub(req, state), do: pub(req, state)
-      def tmnn_unsub(req, state), do: unsub(req, state)
-      def tmnn_subbed_channels(req, state), do: subbed_channels(req, state)
-      def tmnn_sync(req, state), do: sync(req, state)
-      def tmnn_keep_alive(req, state), do: keep_alive(req, state)
-      def tmnn_set_state(req, state), do: set_state(req, state)
-    end
-  end
 
   @doc """
-  Returns the field with the key specified under the `"key"` field
-  in the request. Returns an error string if there is no such item.
+  Returns the field from the state corresponding to the `:key` specified in the request.
+  If the key is not present in the state, returns an error string.
 
   #### Example
-  ```
-  defmethod :
+
+  ```html
+  <button onclick=@get-mydata>Refresh</button>
+  <p>@mydata</p>
   ```
 
+  In this example, clicking the button triggers the `:get` method with the key `:mydata`,
+  updating the contents of the `<p>` element to reflect the current value of `:mydata` in the state.
+
+  _Note: In typical usage, method return values should keep the client state in sync automatically,
+  making manual `:get` calls unnecessary in most cases._
   """
   @spec tmnn_get(map(), map()) ::
-          {field :: map(), [], state :: map()} | {%{error: error :: String.t()}, [], state :: map()}
+          {field :: map(), [], state :: map()}
+          | {%{error: error :: String.t()}, [], state :: map()}
   def tmnn_get(req, state), do: get(req, state)
 
   @doc """
-  Updates the value of the item with the key at the `"key"` field on the request,
-  setting it to the value at the `"value"` key. Returns a tuple with the updated field and
-  the state, or an error string if there is no such item.
+  Updates the value of the field specified by the `"key"` in the request,
+  setting it to the value provided under the `"value"` key. Returns the updated field value,
+  or an error string if the field does not exist.
+
+  #### Example
+
+  ```html
+  <input onchange=@update-name placeholder="Enter your name..">
+  <p>Your name is: <span>@name</span></p>
+  ```
+
+  In the example above, each time the `<input>` changes, the `:name` field in the state will
+  be updated. The updated value will be automatically reflected in the `<p>` element.
+
+  #### Usage with other elements
+
+  This method can also be used with elements that don’t have an intrinsic value
+  (like `<button>`) by explicitly providing a value attribute:
+
+  ```html
+  <button onclick=@update-theme value="dark">Dark mode</button>
+  ```
+
+  In this example, clicking the button sets the `:theme` field in the state to `"dark"`.
   """
   @spec tmnn_update(map(), map()) ::
           {new_field :: map()} | {%{error: error :: String.t()}, [], state :: map()}
   def tmnn_update(req, state), do: update(req, state)
 
   @doc """
-  Subscribes to the channel under the `"key"` field in the request. If there is no such
-  channel, one will be created (with the client subscribed to it).
-  If the client is already subscribed to the channel nothing will happen.
+  Subscribes the client to the channel specified under the `"channel"` field in the request.
+  If the channel does not exist, it will be created automatically. If the client is already
+  subscribed to the channel, the call has no effect.
+
+  ```
+  defmethod :switch_room do
+    target_room_id = req["value"]
+
+    Tamnoon.Methods.unsub(%{"channel" => "room_\#{state[:current_room_id]}"}, state)
+    Tamnoon.Methods.sub(%{"channel" => "room_\#{target_room_id}"}, state)
+
+    {%{current_room_id: target_room_id}}
+  end
+  ```
+
+  In the example above, the `:switch_room` method unsubscribes the client from their
+  currently joined room and subscribes them to a new room with the key `"room_<id>"`.
   """
   @spec tmnn_sub(map(), map()) :: {%{sub: :ok}, [], state :: map()}
   def tmnn_sub(req, state), do: sub(req, state)
 
   @doc """
-  Will send the request under the `"action"` key in the request to every client
-  in the channel under the `"channel"` key.
+  Broadcasts a request to all clients subscribed to the channel specified under the
+  `"channel"` key. The request to be sent is provided under the `"action"` key, and will be
+  treated as a regular method call on the receiving clients.
+
+  #### Example
+
+  ```
+  defmethod :send_message do
+    %{
+      message_content: message_content,
+      current_room_id: current_room_id
+    } = state
+
+    Tamnoon.Methods.pub(%{
+          "channel" => "room_\#{current_room_id}",
+          "action" => %{
+            "method" => "add_message",
+            "message" => message_content
+          }
+        }, state)
+
+    {%{message_content: ""}}
+  end
+  ```
+
+  In the example above, the `:send_message` method broadcasts an `:add_message` method call
+  to all clients in the current room. The broadcasted request includes a `"message"` field
+  with the content of the message.
   """
   @spec tmnn_pub(map(), map()) :: {%{pub: :ok}, [], state :: map()}
   def tmnn_pub(req, state), do: pub(req, state)
 
   @doc """
-  Unsubscribes from the channel under the `"key"` in the request.
+  Unsubscribes the client from the channel specified under the `"channel"` field in the request.
+  If the client is not already subscribed to the channel or it does not exist, the call has
+  no effect. Will return an error string if trying to unsubscribe from the `"clients"` channel.
+
+  ```
+  defmethod :switch_room do
+    target_room_id = req["value"]
+
+    Tamnoon.Methods.unsub(%{"channel" => "room_\#{state[:current_room_id]}"}, state)
+    Tamnoon.Methods.sub(%{"channel" => "room_\#{target_room_id}"}, state)
+
+    {%{current_room_id: target_room_id}}
+  end
+  ```
+
+  In the example above, the `:switch_room` method unsubscribes the client from their
+  currently joined room and subscribes them to a new room with the key `"room_<id>"`.
   """
   @spec tmnn_unsub(map(), map()) ::
-          {%{unsub: :ok}, [], state :: map()} | {%{error: error :: String.t()}, [], state :: map()}
+          {%{unsub: :ok}, [], state :: map()}
+          | {%{error: error :: String.t()}, [], state :: map()}
   def tmnn_unsub(req, state), do: unsub(req, state)
 
   @doc """
@@ -93,20 +154,23 @@ defmodule Tamnoon.Methods do
   def tmnn_subbed_channels(req, state), do: subbed_channels(req, state)
 
   @doc """
-  Returns the current state. Automatically invoked when the connection is started.
+  Returns the current state. This method is automatically invoked when a client
+  connection is established. Intended for internal use by Tamnoon.
   """
   @spec tmnn_sync(map(), map()) :: {state :: map(), [], state :: map()}
   def tmnn_sync(req, state), do: sync(req, state)
 
   @doc """
-  Invoked every 55 seconds by the client in order to prevent idle timeouts.
+  Invoked every 55 seconds by the client in order to prevent idle timeouts. Intended for
+  internal use by Tamnoon.
   """
   @spec tmnn_keep_alive(map(), map()) :: {nil, [], state :: map()}
   def tmnn_keep_alive(req, state), do: keep_alive(req, state)
 
   @doc """
-  Sets the state on the server to the state sent by the client. Invoked when the client reconnects
-  to the server in order to prevent information loss.
+  Sets the server state to the value provided by the client. This is automatically invoked when the client
+  reconnects, helping to restore the previous state and prevent information loss.
+  Intended for internal use by Tamnoon.
   """
   @spec tmnn_set_state(map(), map()) :: {%{set_state: :ok}, [], state :: map()}
   def tmnn_set_state(req, state), do: set_state(req, state)
