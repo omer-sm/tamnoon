@@ -50,11 +50,17 @@ defmodule Tamnoon.MethodManager do
 
     quote do
       def unquote(method_name)(req, state) do
+        var!(state) = state
+        # Use the `state` variable to stop unused variable warnings.
+        if true do
+          _ = var!(state)
+        end
+
         var!(req) = req
         # Use the `req` variable to stop unused variable warnings.
         _ = var!(req)
 
-        var!(state) = state
+
         unquote(block)
       end
     end

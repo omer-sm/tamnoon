@@ -26,6 +26,8 @@
 
 - Setting an element's `class` to a state value will now not override Tamnoon's listener classes.
 
+- Silenced the _unused variable "state"_ warnings for methods.
+
 - Changed the `root` component that gets generated with `m:Mix.Tasks.Tamnoon.OverrideRoot` to not try rendering an `app.html.heex` component by default.
 
 - Fixed a bug causing `<a>` elements to not send their value when triggering a method.
