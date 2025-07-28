@@ -87,6 +87,8 @@ The `Tamnoon.MethodManager.defmethod/2` macro provides your method with two argu
 
 A method must return one of the following:
 
+- An empty tuple `{}`.
+
 - A single-element tuple `{diffs}`.
 
 - A two-element tuple `{diffs, actions}`.

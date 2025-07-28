@@ -6,11 +6,11 @@
 
 - Revamped the documentation.
 
-- Methods will now return a tuple of the form `{diffs}`, `{diffs, actions}` or `{diffs, actions, new_state}`. For the first two, `diffs` will automatically be merged into the state.
+- Methods will now return a tuple of the form `{}`, `{diffs}`, `{diffs, actions}` or `{diffs, actions, new_state}`. For the first two, `diffs` will automatically be merged into the state.
 
 #### Minor changes:
 
-- Removed the MethodManager's `diff/2` function.
+- Removed `m:Tamnoon.MethodManager`'s `diff/2` function.
 
 - Changed debug mode to be able to log only the `req` or `state`, and changed the debug messages formatting.
 

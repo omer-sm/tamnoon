@@ -23,7 +23,7 @@ defmodule Tamnoon.MethodManager do
     is given.
   - `:element`: The raw HTML of the invoking element.
 
-  Methods must return either a tuple of the form `{diffs}`, `{diffs, actions}`, or `{diffs, actions, new_state}` where:
+  Methods must return either a tuple of the form `{}`, `{diffs}`, `{diffs, actions}`, or `{diffs, actions, new_state}` where:
 
   - _diffs_: A map containing the changes in the state (will be updated in the client).
   - _actions_: a list of _actions_ (see `m:Tamnoon.DOM`).
@@ -98,6 +98,8 @@ defmodule Tamnoon.MethodManager do
         |> Code.eval_quoted()
 
       case method_results do
+        {} -> {:reply, {:text, elem(Jason.encode(%{}, []), 1)}, state}
+
         {diffs} ->
           new_state = merge_state(diffs, state)
           {:reply, {:text, elem(Jason.encode(%{diffs: diffs}, []), 1)}, new_state}
@@ -114,7 +116,7 @@ defmodule Tamnoon.MethodManager do
 
         _ ->
           Logger.warning(
-            "Method '#{method}' returned an invalid value '#{inspect(method_results)}'. Methods must return a tuple of the form {diffs}, {diffs, actions}, or {diffs, actions, new_state}."
+            "Method '#{method}' returned an invalid value '#{inspect(method_results)}'. Methods must return a tuple of the form {}, {diffs}, {diffs, actions}, or {diffs, actions, new_state}."
           )
 
           {:reply, {:text, elem(Jason.encode(%{diffs: %{}}, []), 1)}, state}
