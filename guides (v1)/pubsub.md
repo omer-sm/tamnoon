@@ -18,7 +18,7 @@ If a client publishes an `:add_message` method to the channel `"room_123"`, all 
 
 ## Channels
 
-When publishing method calls, they are sent to a specific _channel_. Clients can dynamically _join_ or _leave_ channels using the built-in `:sub` and `:unsub` methods.
+When publishing method calls, they are sent to a specific _channel_. Clients can dynamically _join_ or _leave_ channels using the built-in `:sub` and `:unsub` methods, and view their current subscribed channels using `Tamnoon.Methods.subbed_channels/0`.
 
 - `:sub` subscribes the client to a channel.
 

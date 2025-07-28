@@ -3,7 +3,7 @@ defmodule Tamnoon.Methods do
   A _methods module_ that provides built-in methods for use in your Tamnoon application.
 
   This module offers utilities for basic state management via `tmnn_get/2` and `tmnn_update/2`,
-  as well as PubSub functionality through `tmnn_sub/2`, `tmnn_unsub/2`, `tmnn_pub/2`, and `tmnn_subbed_channels/2`.
+  as well as PubSub functionality through `tmnn_sub/2`, `tmnn_unsub/2`, `tmnn_pub/2` and `subbed_channels/0`.
 
   Most of these methods are primarily intended either to be used internally by Tamnoon,
   or to be triggered from Tamnoon HEEx markup.
@@ -148,13 +148,6 @@ defmodule Tamnoon.Methods do
   def tmnn_unsub(req, state), do: unsub(req, state)
 
   @doc """
-  Returns a list of the channels the client is currently subscribed to.
-  """
-  @spec tmnn_subbed_channels(map(), map()) ::
-          {%{subbed_channels: channels :: [String.t()]}, [], state :: map()}
-  def tmnn_subbed_channels(req, state), do: subbed_channels(req, state)
-
-  @doc """
   Logs the `req` to the console. This method is primarily intended for debugging purposes.
   """
   @spec tmnn_debug(map(), map()) :: {}
@@ -232,15 +225,6 @@ defmodule Tamnoon.Methods do
   end
 
   @doc false
-  def subbed_channels(_req, state) do
-    channels =
-      Tamnoon.Registry
-      |> Registry.keys(self())
-
-    {%{subbed_channels: channels}, [], state}
-  end
-
-  @doc false
   def pub(req, state) do
     Tamnoon.Registry
     |> Registry.dispatch(req["channel"], fn entries ->
@@ -286,6 +270,15 @@ defmodule Tamnoon.Methods do
       true -> nil
     end
   end
+
+  @doc """
+  Returns a list of the channels the client is currently subscribed to.
+  """
+  @spec subbed_channels() :: [term()]
+  def subbed_channels(),
+    do:
+      Tamnoon.Registry
+      |> Registry.keys(self())
 
   defp is_subbed?(key) do
     Tamnoon.Registry

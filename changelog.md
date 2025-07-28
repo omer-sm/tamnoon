@@ -8,6 +8,8 @@
 
 - Methods will now return a tuple of the form `{}`, `{diffs}`, `{diffs, actions}` or `{diffs, actions, new_state}`. For the first two, `diffs` will automatically be merged into the state.
 
+- Changed `Tamnoon.Methods.subbed_channels/0` to a regular function instead of a method.
+
 #### Minor changes:
 
 - Removed `m:Tamnoon.MethodManager`'s `diff/2` function.

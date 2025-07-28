@@ -63,7 +63,7 @@ const addInputListeners = (rootElement = document) => {
 const applyDiffs = (diffs) => {
   for (const [k, v] of Object.entries(diffs)) {
     if (k !== 'error') {
-      if (!(k in ['pub', 'sub', 'unsub', 'subbed_channels', 'set_state'])) {
+      if (!(k in ['pub', 'sub', 'unsub', 'set_state'])) {
         currState[k] = v;
       }
 
