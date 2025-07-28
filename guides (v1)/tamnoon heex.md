@@ -120,3 +120,12 @@ Tamnoon.Methods.pub(%{
   "action" => %{"method" => "ping"}
 }, state)
 ```
+
+> #### Multiple triggers in an element {: .info}
+>
+> An element can have multiple event handlers for the same event in Tamnoon, and all of them will be triggered when the event fires.
+> However, this is usually not recommended and can often be replaced with a cleaner, combined handler.
+>
+> #### Example
+>
+> `<button onclick=@first_method onclick=@second_method>Activate both methods!</button>`
