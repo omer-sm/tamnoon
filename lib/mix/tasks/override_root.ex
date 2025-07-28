@@ -1,6 +1,25 @@
 defmodule Mix.Tasks.Tamnoon.OverrideRoot do
   @moduledoc """
   Creates a default router module and a root component.
+
+  #### Example Usage
+
+  ```console
+  $ mix tamnoon.override_root
+
+  Successfully created "lib/router.ex"!
+  Successfully created "lib/components/root.ex"!
+  Done! Now add router: MyApp.Router to your Tamnoon options in `application.ex` as
+  such:
+
+          def start(_type, _args) do
+            children = [
+              {Tamnoon, [[router: MyApp.Router]]}
+            ]
+            opts = [strategy: :one_for_one, name: MyApp.Supervisor]
+            Supervisor.start_link(children, opts)
+          end
+  ```
   """
   @shortdoc "Creates a default router module and a root component"
 

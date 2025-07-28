@@ -1,6 +1,15 @@
 defmodule Mix.Tasks.Tamnoon.MakeDirs do
   @moduledoc """
   Creates a "components" directory inside "lib" and a "tamnoon_out" directory in the root of the project.
+
+  #### Example Usage
+
+  ```console
+  $ mix tamnoon.make_dirs
+
+  Successfully created "lib/components"!
+  Successfully created "tamnoon_out"!
+  ```
   """
   @shortdoc "Creates the directories needed for Tamnoon to function"
 

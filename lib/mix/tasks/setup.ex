@@ -1,6 +1,17 @@
 defmodule Mix.Tasks.Tamnoon.Setup do
   @moduledoc """
   Runs all the necessary Tamnoon setup tasks.
+
+  #### Example Usage
+
+  ```console
+  $ mix tamnoon.setup
+
+  Running make_dirs task..
+  ...
+  Running override_root task..
+  ...
+  ```
   """
   @shortdoc "Runs all the necessary Tamnoon setup tasks"
 
