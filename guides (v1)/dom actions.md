@@ -10,13 +10,7 @@ Actions such as `m:Tamnoon.DOM.Actions.AddChild` and `m:Tamnoon.DOM.Actions.Remo
 
 #### Lazy Inputs
 
-By default, inputs in Tamnoon are typically bound using `onchange` and `value`, meaning each change triggers a state sync with the server. This can introduce latency during typing. Instead, you can combine:
-
-- `oninput` - to delay syncing while the user types.
-
-- `m:Tamnoon.DOM.Actions.SetValue` - to manually update or clear the input when needed.
-
-This approach improves responsiveness while still enabling programmatic control.
+Inputs in Tamnoon are typically bound using `value`, meaning each change triggers a state sync with the server. This can introduce latency during typing. Instead, you can remove the `value` assignment and use `m:Tamnoon.DOM.Actions.SetValue` to manually change the input's value when needed. This approach improves responsiveness while still enabling programmatic control.
 
 #### Minimal State
 
