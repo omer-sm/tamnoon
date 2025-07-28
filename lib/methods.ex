@@ -14,6 +14,7 @@ defmodule Tamnoon.Methods do
   either the function's return value or the value included in the server's response to the
   client. The context should clarify which is meant._
   """
+  require Logger
 
   @doc """
   Returns the field from the state corresponding to the `:key` specified in the request.
@@ -154,6 +155,12 @@ defmodule Tamnoon.Methods do
   def tmnn_subbed_channels(req, state), do: subbed_channels(req, state)
 
   @doc """
+  Logs the `req` to the console. This method is primarily intended for debugging purposes.
+  """
+  @spec tmnn_debug(map(), map()) :: {}
+  def tmnn_debug(req, state), do: debug(req, state)
+
+  @doc """
   Returns the current state. This method is automatically invoked when a client
   connection is established. Intended for internal use by Tamnoon.
   """
@@ -259,6 +266,12 @@ defmodule Tamnoon.Methods do
   def set_state(req, _state) do
     new_state = for {key, val} <- req["state"], into: %{}, do: {String.to_atom(key), val}
     {%{set_state: :ok}, [], new_state}
+  end
+
+  @doc false
+  def debug(req, _state) do
+    Logger.debug("Debug method called with request: #{inspect(req)}")
+    {}
   end
 
   @doc """
