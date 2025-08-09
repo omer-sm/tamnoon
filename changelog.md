@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.0.0-rc.2
+
+- Fixed a missing app name injection in the success message for the `m:Mix.Tasks.Tamnoon.OverrideRoot` task.
+
 ### v1.0.0-rc.1 (30.07.25)
 
 - Added _DOM Actions_: Methods can now return a third argument of _actions_, which are used to manipulate the DOM in ways that are impossible or convoluted to achieve with the state.
