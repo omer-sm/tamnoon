@@ -169,12 +169,12 @@ const connectWebSocket = (isReconnect = false) => {
     // Parse the server's message to update the necessary elements.
     const { diffs, actions } = JSON.parse(event.data);
 
-    if (!diffs) return;
-
-    applyDiffs(diffs);
-
     if (Array.isArray(actions)) {
       actions.forEach(parseAction);
+    }
+
+    if (diffs) {
+      applyDiffs(diffs);
     }
   };
 
