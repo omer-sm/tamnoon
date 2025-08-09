@@ -4,17 +4,18 @@ This guide will cover _methods_ - the main way to add interactions to your app. 
 
 ## The State
 
-A Tamnoon app maintains a _state_ for each client - a map of key-value pairs that can be read and updated in response to user interactions. This state is initialized as part of your Tamnoon options:
+A Tamnoon app maintains a _state_ for each client - a map of key-value pairs that can be read and updated in response to user interactions. This state is initialized as part of your Tamnoon options, either directly or as a function returning a map:
 
 ```
 def start(_type, _args) do
   children = [
     {Tamnoon, [[
-      initial_state: %{
+      # Could also have been `initial_state: %{...}`
+      initial_state: fn -> %{
         message: "Hello World!",
         button_hidden: true,
         username: "user"
-      },
+      } end,
       # Other options...
     ]]}
   ]

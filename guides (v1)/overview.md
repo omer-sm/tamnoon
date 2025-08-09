@@ -28,8 +28,10 @@ The following guides will walk you through the fundamentals of working with Tamn
 
 If you learn best by example or just want a reference point, here are some sample applications built with Tamnoon:
 
-- _[Chatroom](https://github.com/omer-sm/tamnoon_chat)_: A chat app with rooms and users, demonstrating Tamnoon's **PubSub** functionality.
+- _[QR Generator](https://github.com/omer-sm/tamnoon_qr)_: A small app for generating QR codes. Demonstrates Tamnoon's basic usage in a minimal project.
 
-- _[Actions Test](https://github.com/omer-sm/tamnoon_actions_test)_: A demo app for **Actions**.
+- _[Wordle Clone](https://github.com/omer-sm/tamnoon_wordle)_: A clone of the NYT's popular game Wordle. Demonstrates input validation and more dynamic usage of components.
+
+- _[Chatroom](https://github.com/omer-sm/tamnoon_chat)_: A chat app with rooms and users, demonstrating Tamnoon's **PubSub** functionality and communication with a Phoenix backend.
 
 _Note: This section is WIP and will be expanded in the future._

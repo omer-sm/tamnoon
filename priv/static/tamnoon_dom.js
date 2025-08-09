@@ -24,7 +24,7 @@ const singleSelectorParsers = {
     parseCollectionSelector(collectionSelector).last(),
 };
 
-const parseSingleSelector = (selector) => {
+const parseSingleSelector = (selector, addListeners = false) => {
   if (selector instanceof Node) {
     return selector;
   }
@@ -34,7 +34,13 @@ const parseSingleSelector = (selector) => {
   if (!selectorType || !selectorValue) {
     console.error(`Tamnoon: received invalid selector ${selector}`);
   } else {
-    return singleSelectorParsers[selectorType](selectorValue);
+    const node = singleSelectorParsers[selectorType](selectorValue);
+
+    if (addListeners) {
+      addInputListeners(node);
+    }
+
+    return node;
   }
 };
 
@@ -106,10 +112,10 @@ const actionParsers = {
   RemoveNode: ({ target }) => parseSingleSelector(target).remove(),
 
   ReplaceNode: ({ target, replacement }) =>
-    parseSingleSelector(target).replaceWith(parseSingleSelector(replacement)),
+    parseSingleSelector(target).replaceWith(parseSingleSelector(replacement, true)),
 
   AddChild: ({ parent, child }) =>
-    parseSingleSelector(parent).append(parseSingleSelector(child)),
+    parseSingleSelector(parent).append(parseSingleSelector(child, true)),
 
   SetAttribute: ({ target, attribute, value }) => {
     if (attribute === 'textContent') {
@@ -120,7 +126,9 @@ const actionParsers = {
   },
 
   SetInnerHTML: ({target, value}) => {
-    parseSingleSelector(target).innerHTML = value;
+    const node = parseSingleSelector(target);
+    node.innerHTML = value;
+    addInputListeners(node);
   },
 
   ToggleAttribute: ({ target, attribute, force }) =>

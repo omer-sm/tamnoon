@@ -2,7 +2,13 @@
 
 ### v1.0.0-rc.2
 
+- Fixed a bug where DOM elements added via actions would not be able to trigger methods.
+
 - Fixed a missing app name injection in the success message for the `m:Mix.Tasks.Tamnoon.OverrideRoot` task.
+
+- Added a note about setting the `:initial_state` with a function in the docs.
+
+- Updated the sample apps list.
 
 ### v1.0.0-rc.1 (30.07.25)
 
