@@ -131,8 +131,8 @@ const actionParsers = {
     addInputListeners(node);
   },
 
-  ToggleAttribute: ({ target, attribute, force }) =>
-    parseSingleSelector(target).toggleAttribute(attribute, force),
+  ToggleAttribute: ({ target, attribute, force_to }) =>
+    parseSingleSelector(target).toggleAttribute(attribute, force_to),
 
   SetValue: ({ target, value }) => (parseSingleSelector(target).value = value),
 
