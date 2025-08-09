@@ -115,7 +115,7 @@ defmodule Mix.Tasks.Tamnoon.OverrideRoot do
             children = [
               {Tamnoon, [[router: #{app_name}.Router]]}
             ]
-            opts = [strategy: :one_for_one, name: TamnoonTest.Supervisor]
+            opts = [strategy: :one_for_one, name: #{app_name}.Supervisor]
             Supervisor.start_link(children, opts)
           end"
       )
