@@ -112,7 +112,7 @@ defmodule Tamnoon.Compiler do
     else
       [[nil, "innerText", inner_value]]
     end
-    |> Enum.concat(Regex.scan(~r/(?<attr>[-a-z\d]+)=@(?<key>[_a-z\d]+)/m, component))
+    |> Enum.concat(Regex.scan(~r/(?<attr>[-a-z\d]+)=@(?<key>[-_a-z\d]+)/m, component))
     |> Enum.group_by(&Enum.at(&1, 2), &Enum.at(&1, 1))
   end
 

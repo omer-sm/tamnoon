@@ -4,7 +4,9 @@
 
 - Fixed a bug where attributes with dashes could not be assigned state values.
 
-- DOM elements added via DOM Actions now get state values injected upon being added.
+- DOM elements added via DOM Actions now get existing state values injected upon being added.
+
+- Fixed a bug where elements with an assigned inner value (`innerText` / `innerHTML`) would not get action listeners parsed properly.
 
 ### v1.0.0-rc.2 (09.09.25)
 
