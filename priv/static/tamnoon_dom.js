@@ -38,6 +38,7 @@ const parseSingleSelector = (selector, addListeners = false) => {
 
     if (addListeners) {
       addInputListeners(node);
+      applyDiffs(currState, node, false);
     }
 
     return node;
@@ -129,6 +130,7 @@ const actionParsers = {
     const node = parseSingleSelector(target);
     node.innerHTML = value;
     addInputListeners(node);
+    applyDiffs(currState, node, false);
   },
 
   ToggleAttribute: ({ target, attribute, force_to }) =>
