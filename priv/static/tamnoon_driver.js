@@ -78,7 +78,7 @@ const applyDiffs = (diffs) => {
             .filter((c) => c && new RegExp(`^tmnn-(?:not-)?${k}-`).test(c));
 
           classes.forEach((className) => {
-            const attr = className.slice(className.lastIndexOf('-') + 1);
+            const attr = className.slice(className.lastIndexOf(k) + 1 + k.length);
             const newValue = className.startsWith('tmnn-not-') ? !v : v;
 
             switch (attr) {

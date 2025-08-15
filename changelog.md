@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.0.0-rc.3
+
+- Fixed a bug where attributes with dashes could not be assigned state values.
+
 ### v1.0.0-rc.2 (09.09.25)
 
 - Fixed a bug where DOM elements added via actions would not get diffs injected into them. 
