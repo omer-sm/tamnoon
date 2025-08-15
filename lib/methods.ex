@@ -188,12 +188,12 @@ defmodule Tamnoon.Methods do
 
   @doc false
   def update(req, state) do
-    key = get_key(req, state)
+    key = String.to_atom(req["key"])
 
     if key != nil do
       {%{key => req["value"]}}
     else
-      {%{error: "Error: no matching key"}, [], state}
+      {%{error: "Error: no key provided to update method"}, [], state}
     end
   end
 

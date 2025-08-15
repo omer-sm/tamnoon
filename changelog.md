@@ -2,6 +2,8 @@
 
 ### v1.0.0-rc.3
 
+- The `:update` method will now be able to insert new values into the state.
+
 - Fixed a bug where attributes with dashes could not be assigned state values.
 
 - DOM elements added via DOM Actions now get existing state values injected upon being added.
