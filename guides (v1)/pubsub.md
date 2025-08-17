@@ -53,6 +53,11 @@ In the example above:
 
 - The client's state is updated to reflect the new `current_room_id`.
 
+> #### Manual invocation of PubSub methods {: .info}
+>
+> Unlike other methods, PubSub methods (`:sub`, `:unsub` and `:pub`) just trigger a side effect.
+> This means that when using the manual invocation syntax, there is no need to return their return value from the method, and it can be safely ignored.
+
 ## Publishing
 
 In Tamnoon, clients communicate with each other by _publishing_ method calls. These calls are broadcast to a specified _channel_, where all clients _subscribed_ to that channel (including the sender) will receive and execute the method as if they triggered it themselves.

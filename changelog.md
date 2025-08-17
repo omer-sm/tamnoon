@@ -10,6 +10,8 @@
 
 - Fixed a bug where elements with an assigned inner value (`innerText` / `innerHTML`) would not get action listeners parsed properly.
 
+- Minor documentation changes.
+
 ### v1.0.0-rc.2 (09.09.25)
 
 - Fixed a bug where DOM elements added via actions would not get diffs injected into them. 

@@ -92,3 +92,11 @@ In this example, the rendered output would be:
 ```html
 <button class="btn-primary">Click Me!</button>
 ```
+
+> #### Using live reload {: .info}
+>
+> Tamnoon uses a live reload feature, which causes recompilation whenever a new client connects to the app.
+>
+> However, note that this will not reload changes made to the `application.ex` file.
+>
+> Furthermore, it is optional and can be disabled (see `t:Tamnoon.tamnoon_opts/0`).
