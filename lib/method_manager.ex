@@ -60,7 +60,6 @@ defmodule Tamnoon.MethodManager do
         # Use the `req` variable to stop unused variable warnings.
         _ = var!(req)
 
-
         unquote(block)
       end
     end
@@ -103,13 +102,17 @@ defmodule Tamnoon.MethodManager do
         end
         |> Code.eval_quoted()
 
-      if (method_results != {}) do
-        error_message = Map.get(elem(method_results, 1), :tmnn_error)
-        Logger.error("Method #{method} returned an error: '#{error_message}'")
+      if (method_results != {} && is_map(elem(method_results, 0))) do
+        error_message = Map.get(elem(method_results, 0), :tmnn_error)
+
+        if !is_nil(error_message) do
+          Logger.error("Method '#{method}' returned an error: '#{error_message}'")
+        end
       end
 
       case method_results do
-        {} -> {:reply, {:text, elem(Jason.encode(%{}, []), 1)}, state}
+        {} ->
+          {:reply, {:text, elem(Jason.encode(%{}, []), 1)}, state}
 
         {diffs} ->
           new_state = merge_state(diffs, state)

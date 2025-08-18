@@ -182,7 +182,7 @@ defmodule Tamnoon.Methods do
     if key != nil do
       {%{key => state[key]}, [], state}
     else
-      {%{tmnn_error: "Error: get method failed as key #{key} not found in the state"}, [], state}
+      {%{tmnn_error: "Get method failed as key '#{inspect(key)}' not found in the state"}, [], state}
     end
   end
 
@@ -193,7 +193,7 @@ defmodule Tamnoon.Methods do
     if key != nil do
       {%{key => req["value"]}}
     else
-      {%{tmnn_error: "Error: update method called without a key"}, [], state}
+      {%{tmnn_error: "Update method called without a key"}, [], state}
     end
   end
 
@@ -211,7 +211,7 @@ defmodule Tamnoon.Methods do
   def unsub(req, state) do
     cond do
       req["channel"] == "clients" ->
-        {%{tmnn_error: "Error: unsub method failed as a client cannot unsub from the clients channel"}, [], state}
+        {%{tmnn_error: "Unsub method failed as a client cannot unsub from the clients channel"}, [], state}
 
       is_subbed?(req["channel"]) ->
         Tamnoon.Registry
