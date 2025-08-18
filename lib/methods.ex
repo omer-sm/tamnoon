@@ -35,7 +35,7 @@ defmodule Tamnoon.Methods do
   """
   @spec tmnn_get(map(), map()) ::
           {field :: map(), [], state :: map()}
-          | {%{error: error :: String.t()}, [], state :: map()}
+          | {%{tmnn_error: error :: String.t()}, [], state :: map()}
   def tmnn_get(req, state), do: get(req, state)
 
   @doc """
@@ -65,7 +65,7 @@ defmodule Tamnoon.Methods do
   In this example, clicking the button sets the `:theme` field in the state to `"dark"`.
   """
   @spec tmnn_update(map(), map()) ::
-          {new_field :: map()} | {%{error: error :: String.t()}, [], state :: map()}
+          {new_field :: map()} | {%{tmnn_error: error :: String.t()}, [], state :: map()}
   def tmnn_update(req, state), do: update(req, state)
 
   @doc """
@@ -144,13 +144,13 @@ defmodule Tamnoon.Methods do
   """
   @spec tmnn_unsub(map(), map()) ::
           {%{unsub: :ok}, [], state :: map()}
-          | {%{error: error :: String.t()}, [], state :: map()}
+          | {%{tmnn_error: error :: String.t()}, [], state :: map()}
   def tmnn_unsub(req, state), do: unsub(req, state)
 
   @doc """
   Logs the `req` to the console. This method is primarily intended for debugging purposes.
   """
-  @spec tmnn_debug(map(), map()) :: {}
+  @spec tmnn_debug(map(), map()) :: {%{tmnn_debug: debug_message :: String.t()}, [], state :: map()}
   def tmnn_debug(req, state), do: debug(req, state)
 
   @doc """
@@ -182,7 +182,7 @@ defmodule Tamnoon.Methods do
     if key != nil do
       {%{key => state[key]}, [], state}
     else
-      {%{error: "Error: no matching key"}, [], state}
+      {%{tmnn_error: "Error: get method failed as key #{key} not found in the state"}, [], state}
     end
   end
 
@@ -193,7 +193,7 @@ defmodule Tamnoon.Methods do
     if key != nil do
       {%{key => req["value"]}}
     else
-      {%{error: "Error: no key provided to update method"}, [], state}
+      {%{tmnn_error: "Error: update method called without a key"}, [], state}
     end
   end
 
@@ -211,7 +211,7 @@ defmodule Tamnoon.Methods do
   def unsub(req, state) do
     cond do
       req["channel"] == "clients" ->
-        {%{error: "Error: can't unsub from clients channel"}, [], state}
+        {%{tmnn_error: "Error: unsub method failed as a client cannot unsub from the clients channel"}, [], state}
 
       is_subbed?(req["channel"]) ->
         Tamnoon.Registry
@@ -253,9 +253,9 @@ defmodule Tamnoon.Methods do
   end
 
   @doc false
-  def debug(req, _state) do
+  def debug(req, state) do
     Logger.debug("Debug method called with request: #{inspect(req)}")
-    {}
+    {%{tmnn_debug: "Debug method called with request: #{inspect(req)}"}, [], state}
   end
 
   @doc """

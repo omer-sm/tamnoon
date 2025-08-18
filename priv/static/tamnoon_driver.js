@@ -68,7 +68,11 @@ const addInputListeners = (rootElement = document) => {
 
 const applyDiffs = (diffs, rootElement = document, updateState = true) => {
   for (const [k, v] of Object.entries(diffs)) {
-    if (k !== 'error') {
+    if (k === 'tmnn_error') {
+      console.error(`Tamnoon: Received an error`, v)
+    } else if (k === 'tmnn_debug') {
+      console.log(`Tamnoon debug:`, v)
+    } else {
       if (updateState && !(k in ['pub', 'sub', 'unsub', 'set_state'])) {
         currState[k] = v;
       }

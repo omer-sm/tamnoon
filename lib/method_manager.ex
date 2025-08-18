@@ -40,7 +40,7 @@ defmodule Tamnoon.MethodManager do
     if key != nil do
       {%{key => state[key]}, [], state}
     else
-      {%{error: "Error: no matching key"}, [], state}
+      {%{tmnn_error: "Error: get method failed as key \#{key} not found in the state"}, [], state}
     end
   end
   ```
@@ -89,7 +89,7 @@ defmodule Tamnoon.MethodManager do
     if found_func_info == nil do
       Logger.error("Method '#{method}' not found in any methods module.")
 
-      {:reply, {:text, elem(Jason.encode(%{error: "Method '#{method}' not found."}, []), 1)},
+      {:reply, {:text, elem(Jason.encode(%{tmnn_error: "Method '#{method}' not found."}, []), 1)},
        state}
     else
       {methods_module, {func, _arity}} = found_func_info
@@ -102,6 +102,11 @@ defmodule Tamnoon.MethodManager do
           )
         end
         |> Code.eval_quoted()
+
+      if (method_results != {}) do
+        error_message = Map.get(elem(method_results, 1), :tmnn_error)
+        Logger.error("Method #{method} returned an error: '#{error_message}'")
+      end
 
       case method_results do
         {} -> {:reply, {:text, elem(Jason.encode(%{}, []), 1)}, state}

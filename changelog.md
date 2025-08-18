@@ -10,6 +10,10 @@
 
 - Fixed a bug where elements with an assigned inner value (`innerText` / `innerHTML`) would not get action listeners parsed properly.
 
+- Errors are now logged to the browser and server consoles.
+
+- The `:debug` method now also logs to the browser console.
+
 - Minor documentation changes.
 
 ### v1.0.0-rc.2 (09.09.25)
