@@ -32,6 +32,8 @@ If you learn best by example or just want a reference point, here are some sampl
 
 - _[Wordle Clone](https://github.com/omer-sm/tamnoon_wordle)_: A clone of the NYT's popular game Wordle. Demonstrates input validation and more dynamic usage of components.
 
-- _[Chatroom](https://github.com/omer-sm/tamnoon_chat)_: A chat app with rooms and users, demonstrating Tamnoon's **PubSub** functionality and communication with a Phoenix backend.
+- _[Tic-Tac-Toe](https://github.com/omer-sm/tamnoon_ttt): An app for playing Tic-Tac-Toe with others online. Demonstrates complex PubSub logic.
+
+- _[Chatroom](https://github.com/omer-sm/tamnoon_chat)_: A chat app with rooms and users, demonstrating Tamnoon's PubSub functionality and communication with a Phoenix backend.
 
 _Note: This section is WIP and will be expanded in the future._
