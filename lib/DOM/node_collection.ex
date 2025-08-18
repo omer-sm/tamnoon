@@ -44,6 +44,16 @@ defmodule Tamnoon.DOM.NodeCollection do
 
   def is_node_collection?(_), do: false
 
+  @doc """
+  Constructs a `t:Tamnoon.DOM.NodeCollection.t/0` with the following arguments:
+
+    * `:selector_type` – an atom (`:xpath`, `:query` or `:children`).
+
+    * `:selector_value` – a `t:String.t/0` the value associated with the selector.
+      - `:xpath`: a `t:String.t/0` of the xpath to select by.
+      - `:query`: a `t:String.t/0` of the query selector to select by.
+      - `:children`: a `t:Tamnoon.DOM.Node.t/0` of the parent node.
+  """
   @spec new!(node_collection :: term()) :: %DOM.NodeCollection{}
   def new!(%DOM.NodeCollection{} = node_collection), do: node_collection
 

@@ -57,6 +57,18 @@ defmodule Tamnoon.DOM.Node do
 
   def is_node?(_), do: false
 
+  @doc """
+  Constructs a `t:Tamnoon.DOM.Node.t/0` with the following arguments:
+
+    * `:selector_type` – an atom (`:id`, `:xpath`, `:from_string`, `:first_element`, `:last_element` or `:iteration_placeholder`).
+
+    * `:selector_value` – the value associated with the selector.
+      - `:id`: a `t:String.t/0` of the id to select.
+      - `:xpath`: a `t:String.t/0` of the node's xpath.
+      - `:from_string`: a `t:String.t/0` representing the HTML element.
+      - `:first_element` and `:last_element`: a `t:Tamnoon.DOM.NodeCollection.t/0` representing the collection to query.
+      - `:iteration_placeholder`: `nil`.
+  """
   @spec new!(node :: term()) :: %DOM.Node{}
   def new!(%DOM.Node{} = node), do: node
 

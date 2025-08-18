@@ -16,7 +16,7 @@ defmodule Tamnoon.DOM.Actions.ToggleAttribute do
           force_to: boolean() | nil
         }
 
-        @doc """
+  @doc """
   Returns whether the argument is a `t:Tamnoon.DOM.Actions.ToggleAttribute.t/0`, or a map with
   the necessary properties to construct one (via `new!/1`).
   """
