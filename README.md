@@ -22,7 +22,7 @@ The package can be installed by adding `tamnoon` to your list of dependencies in
 ```elixir
 def deps do
   [
-    {:tamnoon, "~> 1.0.0-rc.2"}
+    {:tamnoon, "~> 1.0.0-rc.3"}
   ]
 end
 ```

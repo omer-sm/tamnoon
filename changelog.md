@@ -1,6 +1,6 @@
 # Changelog
 
-### v1.0.0-rc.3
+### v1.0.0-rc.3 (20.08.25)
 
 - The `:update` method will now be able to insert new values into the state.
 
@@ -16,7 +16,7 @@
 
 - Minor documentation changes.
 
-### v1.0.0-rc.2 (09.09.25)
+### v1.0.0-rc.2 (09.08.25)
 
 - Fixed a bug where DOM elements added via actions would not get diffs injected into them. 
 

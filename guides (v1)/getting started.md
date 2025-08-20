@@ -12,7 +12,7 @@ Next, add Tamnoon to your `deps` in `mix.exs`:
   defp deps do
     [
       # Other dependencies...
-      {:tamnoon, "~> 1.0.0-rc.2"}
+      {:tamnoon, "~> 1.0.0-rc.3"}
     ]
   end
 ```
