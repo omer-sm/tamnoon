@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.0.0-rc.4
+
+- Fixed a bug where calling `Tamnoon.MethodManager.trigger_method/2` inside the `:initial_state` callback would not trigger the method properly.
+
 ### v1.0.0-rc.3 (20.08.25)
 
 - The `:update` method will now be able to insert new values into the state.

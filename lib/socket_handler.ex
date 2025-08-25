@@ -15,7 +15,7 @@ defmodule Tamnoon.SocketHandler do
   @spec init(:cowboy_req.req(), map()) ::
           {:cowboy_websocket, req :: :cowboy_req.req(), initial_state :: map(), opts :: map()}
   def init(req, _state) do
-    {:cowboy_websocket, req, initial_state(), %{idle_timeout: 120_000}}
+    {:cowboy_websocket, req, %{}, %{idle_timeout: 120_000}}
   end
 
   @doc """
@@ -23,11 +23,11 @@ defmodule Tamnoon.SocketHandler do
   """
   @impl true
   @spec websocket_init(map()) :: {:ok, state :: map()}
-  def websocket_init(state) do
+  def websocket_init(_state) do
     Tamnoon.Registry
     |> Registry.register("clients", {})
 
-    {:ok, state}
+    {:ok, initial_state()}
   end
 
   @doc """
