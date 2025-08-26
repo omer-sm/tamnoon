@@ -69,9 +69,9 @@ const addInputListeners = (rootElement = document) => {
 const applyDiffs = (diffs, rootElement = document, updateState = true) => {
   for (const [k, v] of Object.entries(diffs)) {
     if (k === 'tmnn_error') {
-      console.error(`Tamnoon: Received an error`, v)
+      console.error(`Tamnoon: Received an error`, v);
     } else if (k === 'tmnn_debug') {
-      console.log(`Tamnoon debug:`, v)
+      console.log(`Tamnoon debug:`, v);
     } else {
       if (updateState && !(k in ['pub', 'sub', 'unsub', 'set_state'])) {
         currState[k] = v;
@@ -131,6 +131,21 @@ const applyDiffs = (diffs, rootElement = document, updateState = true) => {
                 elem.setAttribute('disabled', newValue);
               } else {
                 elem.removeAttribute('disabled');
+              }
+
+              break;
+
+            case 'src':
+              elem.src = newValue;
+
+              switch (elem.tagName) {
+                case 'VIDEO':
+                  elem.load();
+                  break;
+
+                case 'SOURCE':
+                  elem.closest('video').load();
+                  break;
               }
 
               break;

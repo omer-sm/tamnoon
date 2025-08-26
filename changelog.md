@@ -4,6 +4,8 @@
 
 - Fixed a bug where calling `Tamnoon.MethodManager.trigger_method/2` inside the `:initial_state` callback would not trigger the method properly.
 
+- Fixed a bug where changing a `<video>`'s `src` attribute would not reload the video.
+
 ### v1.0.0-rc.3 (20.08.25)
 
 - The `:update` method will now be able to insert new values into the state.

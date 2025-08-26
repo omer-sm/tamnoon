@@ -119,14 +119,34 @@ const actionParsers = {
     parseSingleSelector(parent).append(parseSingleSelector(child, true)),
 
   SetAttribute: ({ target, attribute, value }) => {
-    if (attribute === 'textContent') {
-      parseSingleSelector(target).textContent = value;
-    } else {
-      parseSingleSelector(target).setAttribute(attribute, value);
+    const targetElem = parseSingleSelector(target);
+
+    switch (attribute) {
+      case 'textContent':
+        targetElem.textContent = value;
+        break;
+
+      case 'src':
+        targetElem.src = value;
+
+        switch (targetElem.tagName) {
+          case 'VIDEO':
+            targetElem.load();
+            break;
+
+          case 'SOURCE':
+            targetElem.closest('video').load();
+            break;
+        }
+        break;
+
+      default:
+        targetElem.SetAttribute(attribute, value);
+        break;
     }
   },
 
-  SetInnerHTML: ({target, value}) => {
+  SetInnerHTML: ({ target, value }) => {
     const node = parseSingleSelector(target);
     node.innerHTML = value;
     addInputListeners(node);
