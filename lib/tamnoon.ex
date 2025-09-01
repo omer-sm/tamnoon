@@ -103,7 +103,8 @@ defmodule Tamnoon do
           initial_state: Keyword.get(server_opts, :initial_state, %{}),
           methods_modules: [Tamnoon.Methods | Keyword.get(server_opts, :methods_modules, [])],
           debug_mode: Keyword.get(server_opts, :debug_mode, :none),
-          live_reload: Keyword.get(server_opts, :live_reload, true)
+          live_reload: Keyword.get(server_opts, :live_reload, true),
+          app_start_time: DateTime.utc_now()
         ]
       )
     ]
