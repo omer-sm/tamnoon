@@ -1,6 +1,6 @@
 # Changelog
 
-### v1.0.0-rc.4
+### v1.0.0-rc.4 (02.09.25)
 
 - Added a warning for unloaded changes to the `application.ex` file when using Live reload.
 
