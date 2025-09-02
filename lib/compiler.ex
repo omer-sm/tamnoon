@@ -67,7 +67,7 @@ defmodule Tamnoon.Compiler do
   @spec parse_tmnn_heex(String.t()) :: String.t()
   def parse_tmnn_heex(compiled_heex) do
     Regex.replace(
-      ~r/< *\w *[^>]*> *(?:@([-_a-z\d]+))?/m,
+      ~r/< *\w *[^>]*> *(?:@([-_A-z\d]+))?/m,
       compiled_heex,
       fn x, inner_value ->
         attr_classes =
@@ -83,8 +83,8 @@ defmodule Tamnoon.Compiler do
               end)
           end)
 
-        x = Regex.replace(~r/(?<attr>[-a-z\d]+)=@(?<key>[-_a-z\d]+)/m, x, "")
-        x = Regex.replace(~r/>( *@[-_a-z\d]+)/m, x, ">")
+        x = Regex.replace(~r/(?<attr>[-_A-z\d]+)=@(?<key>[-_A-z\d]+)/m, x, "")
+        x = Regex.replace(~r/>( *@[-_A-z\d]+)/m, x, ">")
 
         x =
           if x =~ ~r/class="[^"]*"/ || attr_classes == "" do
@@ -102,7 +102,7 @@ defmodule Tamnoon.Compiler do
   end
 
   defp get_component_attrs(component, "") do
-    Regex.scan(~r/(?<attr>[-a-z\d]+)=@(?<key>[-_a-z\d]+)/m, component)
+    Regex.scan(~r/(?<attr>[-_A-z\d]+)=@(?<key>[-_A-z\d]+)/m, component)
     |> Enum.group_by(&Enum.at(&1, 2), &Enum.at(&1, 1))
   end
 
@@ -112,7 +112,7 @@ defmodule Tamnoon.Compiler do
     else
       [[nil, "innerText", inner_value]]
     end
-    |> Enum.concat(Regex.scan(~r/(?<attr>[-a-z\d]+)=@(?<key>[-_a-z\d]+)/m, component))
+    |> Enum.concat(Regex.scan(~r/(?<attr>[-A-z\d]+)=@(?<key>[-_A-z\d]+)/m, component))
     |> Enum.group_by(&Enum.at(&1, 2), &Enum.at(&1, 1))
   end
 

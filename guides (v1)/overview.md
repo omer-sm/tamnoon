@@ -34,6 +34,8 @@ If you learn best by example or just want a reference point, here are some sampl
 
 - _[Tic-Tac-Toe](https://github.com/omer-sm/tamnoon_ttt)_: An app for playing Tic-Tac-Toe with others online. Demonstrates complex PubSub logic.
 
+- _[Cameras](https://github.com/omer-sm/tamnoon_cameras)_: An app demonstrating usage of Tamnoon in a microservice architecture via RabbitMQ.
+
 - _[Chatroom](https://github.com/omer-sm/tamnoon_chat)_: A chat app with rooms and users, demonstrating Tamnoon's PubSub functionality and communication with a Phoenix backend.
 
 _Note: This section is WIP and will be expanded in the future._
